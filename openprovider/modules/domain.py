@@ -17,4 +17,4 @@ class DomainModule(common.Module):
                             e.name(name),
                             e.extension(extension))))))
 
-        return response.data.array[0].item[0]
+        return response.data.array[0].item[0].status

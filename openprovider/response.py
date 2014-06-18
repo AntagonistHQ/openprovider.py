@@ -13,12 +13,7 @@ class Response(object):
     data = None
 
     def __init__(self, source):
-        if isinstance(source, six.string_types):
-            # The source looks stringy, parse it
-            self.tree = lxml.objectify.fromstring(source)
-        else:
-            # Not stringy, probably file-like, let lxml handle it
-            self.tree = lxml.objectify.parse(source).getroot()
+        self.tree = lxml.objectify.fromstring(source)
 
         self.reply = self.tree.reply
         self.code = self.reply.code
