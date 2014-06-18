@@ -5,8 +5,8 @@ import lxml.objectify
 import lxml.etree
 import requests
 
-from modules import *
-import response
+from openprovider.modules import *
+from openprovider import response
 
 
 class OpenProvider(object):

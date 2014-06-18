@@ -1,3 +1,3 @@
 # coding=utf-8
 
-from api import OpenProvider
+from openprovider.api import OpenProvider

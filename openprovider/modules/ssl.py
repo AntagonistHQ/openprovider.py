@@ -1,6 +1,6 @@
 # coding=utf-8
 
-import common
+from openprovider.modules import common
 
 
 class SSLModule(common.Module):
