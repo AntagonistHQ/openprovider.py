@@ -18,7 +18,6 @@ setup(
     install_requires=[
         "requests >= 2.3.0",
         "lxml >= 3.3.5",
-        "six >= 1.7.2",
     ],
     setup_requires=['nose>=1.0']
 )

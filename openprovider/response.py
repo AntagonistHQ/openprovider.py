@@ -1,6 +1,5 @@
 # coding=utf-8
 
-import six
 import lxml
 import lxml.objectify
 
