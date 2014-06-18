@@ -17,3 +17,7 @@ class ModelTests(unittest.TestCase):
     def test_domain_str(self):
         dom = Domain(name="example", extension="com")
         self.assertEqual(str(dom), "example.com")
+
+    def test_phone_str(self):
+        p = Phone(countryCode="+31", areaCode="026", subscriberNumber="3557772")
+        self.assertEqual(str(p), "+31 026 3557772")

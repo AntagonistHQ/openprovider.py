@@ -116,7 +116,10 @@ class Phone(Model):
     areaCode (required)
     subscriberNumber (required)
     """
-    pass
+
+    def __str__(self):
+        fmt = " ".join((self.countryCode, self.areaCode, self.subscriberNumber))
+        return fmt
 
 
 class Reseller(Model):
