@@ -13,3 +13,7 @@ class ModelTests(unittest.TestCase):
     def test_name_str(self):
         leo = Name(firstName="Leonardo", prefix="da", lastName="Vinci")
         self.assertEqual(str(leo), "Leonardo da Vinci")
+
+    def test_domain_str(self):
+        dom = Domain(name="example", extension="com")
+        self.assertEqual(str(dom), "example.com")

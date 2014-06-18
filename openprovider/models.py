@@ -50,7 +50,9 @@ class Domain(Model):
     extension (required)
         The extension part of the domain name
     """
-    pass
+
+    def __str__(self):
+        return ".".join((self.name, self.extension))
 
 
 class Nameserver(Model):
