@@ -13,11 +13,12 @@ from openprovider.data.exception_map import from_code
 class OpenProvider(object):
     username = None
     password = None
-    URL = "https://api.openprovider.eu"
+    url = None
 
-    def __init__(self, username, password):
+    def __init__(self, username, password, url="https://api.openprovider.eu"):
         self.username = username
         self.password = password
+        self.url = url
 
         # Initialize and add all modules.
         self.customers = customer.CustomerModule().with_parent(self)
@@ -45,7 +46,7 @@ class OpenProvider(object):
             xml_declaration=True
         )
 
-        apiresponse = requests.post(self.URL, data=apirequest)
+        apiresponse = requests.post(self.url, data=apirequest)
         tree = lxml.objectify.fromstring(apiresponse.content)
 
         if tree.reply.code == 0:
