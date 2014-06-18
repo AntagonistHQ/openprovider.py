@@ -14,6 +14,7 @@ setup(
     long_description=open('README.rst').read(),
     install_requires=[
         "requests >= 2.3.0",
-        "lxml >= 3.3.5"
+        "lxml >= 3.3.5",
+        "six >= 1.7.2",
     ]
 )
