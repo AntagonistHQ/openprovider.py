@@ -3,13 +3,17 @@
 
 class Model(object):
     _obj = None
+    attrs = {}
 
-    def __init__(self, obj=None):
+    def __init__(self, obj=None, **kwargs):
         self._obj = obj
+        self.attrs.update(kwargs)
 
     def __getattr__(self, attr):
         if attr in self.__dict__:
             return getattr(self, attr)
+        elif attr in self.attrs:
+            return self.attrs[attr]
         else:
             return getattr(self._obj, attr)
 
