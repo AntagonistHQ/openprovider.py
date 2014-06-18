@@ -1,19 +1,13 @@
 # coding=utf-8
 
-import unittest
-import openprovider
-
+from openprovider import tests
 from openprovider.exceptions import *
 
 
-class IntegrationTest(unittest.TestCase):
+class IntegrationTest(tests.ApiTestCase):
     """
     A set of smoke tests that test the complete stack against the live API.
     """
-
-    def setUp(self):
-        self.api = openprovider.OpenProvider('test', 'test')
-
     def test_domain_active(self):
         self.assertEqual(self.api.domains.check("openprovider.eu"), "active")
 
