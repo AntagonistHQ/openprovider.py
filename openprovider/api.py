@@ -13,7 +13,9 @@ from openprovider.data.exception_map import from_code
 class OpenProvider(object):
     username = None
     password = None
+
     url = None
+    session = None
 
     def __init__(self, username, password, url="https://api.openprovider.eu"):
         self.username = username
@@ -29,6 +31,11 @@ class OpenProvider(object):
         self.ssl = ssl.SSLModule().with_parent(self)
         self.reseller = reseller.ResellerModule().with_parent(self)
         self.financial = financial.FinancialModule().with_parent(self)
+
+        # Set up Requests session
+        self.session = requests.Session()
+        self.session.verify = True
+        self.session.headers.update({"User-Agent": "openprovider.py/0.1"})
 
     def request(self, tree, **kwargs):
         e = lxml.objectify.ElementMaker(annotate=False)
@@ -46,7 +53,7 @@ class OpenProvider(object):
             xml_declaration=True
         )
 
-        apiresponse = requests.post(self.url, data=apirequest)
+        apiresponse = self.session.post(self.url, data=apirequest)
         tree = lxml.objectify.fromstring(apiresponse.content)
 
         if tree.reply.code == 0:
