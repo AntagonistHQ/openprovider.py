@@ -2,6 +2,7 @@
 
 from openprovider import tests
 from openprovider.exceptions import *
+from openprovider.models import *
 
 
 class IntegrationTest(tests.ApiTestCase):
@@ -23,3 +24,8 @@ class IntegrationTest(tests.ApiTestCase):
     def test_domain_check_many(self):
         r = self.api.domains.check_many(["example.com", "example.net"])
         self.assertEqual(r, {"example.com": "active", "example.net": "active"})
+
+    def test_reseller_retrieve(self):
+        r = self.api.reseller.retrieve()
+        self.assertTrue(isinstance(r, Reseller))
+        self.assertTrue(isinstance(r.address, Address))
