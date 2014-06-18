@@ -12,8 +12,8 @@ class Response(object):
     desc = None
     data = None
 
-    def __init__(self, source):
-        self.tree = lxml.objectify.fromstring(source)
+    def __init__(self, tree):
+        self.tree = tree
 
         self.reply = self.tree.reply
         self.code = self.reply.code

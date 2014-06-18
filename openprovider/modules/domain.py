@@ -5,7 +5,10 @@ from openprovider.modules import common
 
 class DomainModule(common.Module):
     def check(self, domain):
-        """Check availability for a single domain. Returns status as a str."""
+        """
+        Check availability for a single domain. Returns the domain's status
+        as a string (either "active" or "free").
+        """
         e = self.e
         (name, extension) = domain.split(".")
 
