@@ -17,6 +17,9 @@ class IntegrationTest(tests.ApiTestCase):
     def test_domain_check_invalid(self):
         self.assertRaises(BadRequest, self.api.domains.check, "invalid.invalid")
 
+    def test_domain_check_short(self):
+        self.assertRaises(BadRequest, self.api.domains.check, "a.com")
+
     def test_domain_check_many(self):
         r = self.api.domains.check_many(["example.com", "example.net"])
         self.assertEqual(r, {"example.com": "active", "example.net": "active"})

@@ -3,7 +3,8 @@
 from openprovider.exceptions import *
 
 MAPPING = {
-    307: BadRequest
+    307: BadRequest,   # Invalid domain extension
+    501: BadRequest,   # Domain name too short
 }
 
 
