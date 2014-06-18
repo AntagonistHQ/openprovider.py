@@ -52,5 +52,5 @@ class OpenProvider(object):
             return response.Response(tree)
         else:
             klass = from_code(tree.reply.code)
-            raise klass(tree.reply.desc)
+            raise klass("{} ({})".format(tree.reply.desc, tree.reply.code))
 
