@@ -24,6 +24,72 @@ def submodel(klass, key):
     return property(getter)
 
 
+class Name(Model):
+    """
+    initials (required)
+        Initials (first letters of first names, first letter of last name)
+    firstName (required)
+        First name
+    prefix (optional)
+        Prefix (often occuring in Dutch names; for example van de)
+    lastName (required)
+        Last name
+    """
+    pass
+
+
+class Domain(Model):
+    """
+    name (required)
+        The domain name without extension
+    extension (required)
+        The extension part of the domain name
+    """
+    pass
+
+
+class Nameserver(Model):
+    """
+    name (required)
+        URI or hostname of the nameserver
+    ip (required if no valid ip6)
+        IPv4 address of the nameserver
+    ip6 (required if no valid ip)
+        IPv6 address of the nameserver
+    """
+    pass
+
+
+class Record(Model):
+    """
+    type (required)
+        One of the following data types: A, AAAA, CNAME, MX, SPF, TXT
+    name (optional)
+        The part of the hostname before the domainname; for example www or ftp
+    value (required)
+        The value of the record; depending on the type, certain restrictions
+        apply; see the FAQ for these restrictions
+    prio (optional)
+        Priority of the record; required for MX records; ignored for all other
+        record types
+    ttl (required)
+        The Time To Live of the record; this is a value in seconds
+    """
+    pass
+
+
+class History(Model):
+    """
+    date (required)
+        Date of the modification
+    was (required)
+        Old contents of the record
+    is (required)
+        New contents of the record
+    """
+    pass
+
+
 class Address(Model):
     """
     street (required)
