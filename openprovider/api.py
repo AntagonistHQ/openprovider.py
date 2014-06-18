@@ -1,16 +1,24 @@
 # coding=utf-8
 
+import lxml
+import lxml.objectify
+import lxml.etree
+import requests
+
 from modules import *
+import response
 
 
 class OpenProvider(object):
     username = None
     password = None
+    URL = "https://api.openprovider.eu"
 
     def __init__(self, username, password):
         self.username = username
         self.password = password
 
+        # Initialize and add all modules.
         self.customers = customer.CustomerModule().with_parent(self)
         self.domains = domain.DomainModule().with_parent(self)
         self.extensions = extension.ExtensionModule().with_parent(self)
@@ -19,4 +27,23 @@ class OpenProvider(object):
         self.ssl = ssl.SSLModule().with_parent(self)
         self.reseller = reseller.ResellerModule().with_parent(self)
         self.financial = financial.FinancialModule().with_parent(self)
+
+    def request(self, tree, **kwargs):
+        e = lxml.objectify.ElementMaker(annotate=False)
+
+        apirequest = lxml.etree.tostring(
+            e.openXML(
+                e.credentials(
+                    e.username(self.username),
+                    e.password(self.password),
+                ),
+                tree
+            ),
+
+            encoding='utf-8',
+            xml_declaration=True
+        )
+
+        apiresponse = requests.post(self.URL, data=apirequest)
+        return response.Response(apiresponse.content)
 
