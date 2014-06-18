@@ -35,7 +35,12 @@ class Name(Model):
     lastName (required)
         Last name
     """
-    pass
+
+    def __str__(self):
+        if hasattr(self, "prefix"):
+            return " ".join((self.firstName, self.prefix, self.lastName))
+        else:
+            return " ".join((self.firstName, self.lastName))
 
 
 class Domain(Model):
