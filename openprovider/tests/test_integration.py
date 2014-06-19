@@ -5,7 +5,7 @@ from openprovider.exceptions import *
 from openprovider.models import *
 
 
-class IntegrationTest(tests.ApiTestCase):
+class TestIntegration(tests.ApiTestCase):
     """
     A set of smoke tests that test the complete stack against the live API.
     """
