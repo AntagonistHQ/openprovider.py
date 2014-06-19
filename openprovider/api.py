@@ -3,9 +3,9 @@
 import lxml
 import lxml.objectify
 import lxml.etree
-import requests
 
 from openprovider import response
+from openprovider import anyhttp
 from openprovider.modules import *
 from openprovider.data.exception_map import from_code
 
@@ -14,13 +14,11 @@ class OpenProvider(object):
     username = None
     password = None
 
-    url = None
-    session = None
+    http = None
 
     def __init__(self, username, password, url="https://api.openprovider.eu"):
         self.username = username
         self.password = password
-        self.url = url
 
         # Initialize and add all modules.
         self.customers = customer.CustomerModule().with_parent(self)
@@ -33,9 +31,7 @@ class OpenProvider(object):
         self.financial = financial.FinancialModule().with_parent(self)
 
         # Set up Requests session
-        self.session = requests.Session()
-        self.session.verify = True
-        self.session.headers.update({"User-Agent": "openprovider.py/0.1"})
+        self.http = anyhttp.HttpClient.any(url)
 
     def request(self, tree, **kwargs):
         e = lxml.objectify.ElementMaker(annotate=False)
@@ -53,8 +49,8 @@ class OpenProvider(object):
             xml_declaration=True
         )
 
-        apiresponse = self.session.post(self.url, data=apirequest)
-        tree = lxml.objectify.fromstring(apiresponse.content)
+        apiresponse = self.http.post(apirequest)
+        tree = lxml.objectify.fromstring(apiresponse)
 
         if tree.reply.code == 0:
             return response.Response(tree)
