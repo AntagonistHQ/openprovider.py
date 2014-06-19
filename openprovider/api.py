@@ -45,8 +45,7 @@ class OpenProvider(object):
                 tree
             ),
 
-            encoding='utf-8',
-            xml_declaration=True
+            method='c14n'
         )
 
         apiresponse = self.http.post(apirequest)
