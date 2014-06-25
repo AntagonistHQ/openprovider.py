@@ -10,7 +10,7 @@ class TestIntegration(tests.ApiTestCase):
     A set of smoke tests that test the complete stack against the live API.
     """
     def test_domain_check_active(self):
-        self.assertEqual(self.api.domains.check("openprovider.eu"), "active")
+        self.assertEqual(self.api.domains.check("example.com"), "active")
 
     def test_domain_check_free(self):
         self.assertEqual(self.api.domains.check("oy6uT6caew3deej.com"), "free")
