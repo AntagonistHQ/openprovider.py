@@ -19,5 +19,8 @@ setup(
         "requests >= 2.3.0",
         "lxml >= 3.3.5",
     ],
-    setup_requires=['nose>=1.0']
+    setup_requires=[
+        'nose>=1.0',
+        'coverage>=3.7'
+    ]
 )
