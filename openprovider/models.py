@@ -163,3 +163,26 @@ class SSLProduct(Model):
     description
     """
     pass
+
+
+class SSLOrder(Model):
+    """
+    id
+    commonName
+    productName
+    brandName
+    status
+    orderDate
+    activeDate
+    expirationDate
+    hostNames
+    organizationHandle
+    administrativeHandle
+    technicalHandle
+    billingHandle
+    emailApprover
+    csr
+    certificate
+    rootCertificate
+    """
+    pass
