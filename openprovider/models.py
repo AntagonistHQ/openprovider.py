@@ -1,7 +1,18 @@
 # coding=utf-8
 
+"""
+Wrapper classes for API models. Most of these are thin wrappers over lxml
+objectified versions of API responses.
+"""
+
+import lxml.etree
+
 
 class Model(object):
+    """
+    Superclass for all models. Delegates attribute access to a wrapped class.
+    """
+
     _obj = None
     attrs = {}
 
@@ -10,6 +21,12 @@ class Model(object):
         self.attrs.update(kwargs)
 
     def __getattr__(self, attr):
+        """
+        Magic for returning an attribute. Will try the attributes of the wrapper
+        class first, then attributes in self.attrs, then the attributes of the
+        wrapped objectified element.
+        """
+
         if attr in self.__dict__:
             return getattr(self, attr)
         elif attr in self.attrs:
@@ -17,8 +34,17 @@ class Model(object):
         else:
             return getattr(self._obj, attr)
 
+    def get_elem(self):
+        """Returns the wrapped lxml element, if one exists, or else None."""
+        return self._obj
+
+    def dump(self, *args, **kwargs):
+        """Dumps a representation of the Model on standard output."""
+        lxml.etree.dump(self._obj, *args, **kwargs)
+
 
 def submodel(klass, key):
+    """Shortcut for defining a submodel (has-a relation)."""
     def getter(self):
         return klass(getattr(self._obj, key))
     return property(getter)
@@ -26,6 +52,8 @@ def submodel(klass, key):
 
 class Name(Model):
     """
+    A person's name.
+
     initials (required)
         Initials (first letters of first names, first letter of last name)
     firstName (required)
@@ -45,6 +73,8 @@ class Name(Model):
 
 class Domain(Model):
     """
+    A domain name.
+
     name (required)
         The domain name without extension
     extension (required)
@@ -57,6 +87,8 @@ class Domain(Model):
 
 class Nameserver(Model):
     """
+    A nameserver with either an IPv4 or an IPv6 address.
+
     name (required)
         URI or hostname of the nameserver
     ip (required if no valid ip6)
@@ -69,6 +101,8 @@ class Nameserver(Model):
 
 class Record(Model):
     """
+    A DNS record.
+
     type (required)
         One of the following data types: A, AAAA, CNAME, MX, SPF, TXT
     name (optional)
@@ -87,6 +121,8 @@ class Record(Model):
 
 class History(Model):
     """
+    Representation of a single modification of a piece of data.
+
     date (required)
         Date of the modification
     was (required)
@@ -99,6 +135,8 @@ class History(Model):
 
 class Address(Model):
     """
+    A physical street address.
+
     street (required)
     number (required)
     suffix (optional)
@@ -112,18 +150,23 @@ class Address(Model):
 
 class Phone(Model):
     """
+    An international phone number.
+
     countryCode (required)
     areaCode (required)
     subscriberNumber (required)
     """
 
     def __str__(self):
+        """Returns the parts of the phone number seperated by spaces."""
         fmt = " ".join((self.countryCode, self.areaCode, self.subscriberNumber))
         return fmt
 
 
 class Reseller(Model):
     """
+    A reseller profile.
+
     id
     companyName
     address
@@ -141,6 +184,8 @@ class Reseller(Model):
 
 class SSLProduct(Model):
     """
+    An SSL product.
+
     id
     name
     brandName
@@ -167,6 +212,8 @@ class SSLProduct(Model):
 
 class SSLOrder(Model):
     """
+    An ordered SSL certificate.
+
     id
     commonName
     productName

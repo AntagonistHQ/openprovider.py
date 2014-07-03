@@ -5,6 +5,8 @@ import openprovider
 
 
 class ApiTestCase(unittest.TestCase):
+    """Superclass for all API test cases. Sets up the self.api value."""
+
     api = None
 
     def setUp(self):

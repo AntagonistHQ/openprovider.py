@@ -4,6 +4,8 @@ from openprovider.modules import common
 
 
 class DomainModule(common.Module):
+    """Bindings to API methods in the domain module."""
+
     def check(self, domain):
         """
         Check availability for a single domain. Returns the domain's status

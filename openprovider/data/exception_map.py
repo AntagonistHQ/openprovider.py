@@ -1,5 +1,7 @@
 # coding=utf-8
 
+"""Provides a mapping from OpenProvider API error codes to Python exceptions."""
+
 from openprovider.exceptions import *
 
 MAPPING = {

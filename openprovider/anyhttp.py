@@ -1,5 +1,9 @@
 # coding=utf-8
 
+"""
+Wrappers around Requests and urllib that allow openprovider.py to use both
+interchangably.
+"""
 
 class HttpClient(object):
     """Superclass for all the HTTP client adapter implementations."""

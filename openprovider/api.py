@@ -1,22 +1,30 @@
 # coding=utf-8
 
+"""
+Entry point for the OpenProvider API.
+"""
+
 import lxml
 import lxml.objectify
 import lxml.etree
 
 from openprovider import response
 from openprovider import anyhttp
-from openprovider.modules import *
+from openprovider.modules import customer, domain, extension, financial, \
+    nameserver, nsgroup, reseller, ssl
 from openprovider.data.exception_map import from_code
 
 
 class OpenProvider(object):
+    """A connection to the OpenProvider API."""
+
     username = None
     password = None
 
     http = None
 
     def __init__(self, username, password, url="https://api.openprovider.eu"):
+        """Initializes the connection with the given username and password."""
         self.username = username
         self.password = password
 
@@ -34,6 +42,11 @@ class OpenProvider(object):
         self.http = anyhttp.HttpClient.any(url)
 
     def request(self, tree, **kwargs):
+        """
+        Construct a new request with the given tree as its contents, then ship
+        it to the OpenProvider API.
+        """
+
         e = lxml.objectify.ElementMaker(annotate=False)
 
         apirequest = lxml.etree.tostring(

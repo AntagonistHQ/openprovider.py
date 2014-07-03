@@ -5,6 +5,8 @@ from openprovider.models import Reseller
 
 
 class ResellerModule(common.Module):
+    """Bindings to API methods in the reseller module."""
+
     def retrieve(self):
         """
         Retrieve contact information on ourselves.

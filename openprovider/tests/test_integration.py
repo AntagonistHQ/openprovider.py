@@ -1,42 +1,57 @@
 # coding=utf-8
 
+"""
+The test_integration module provides integration (black-box) tests for the
+entire library.
+"""
+
 from openprovider import tests
 from openprovider.data.sslcerts import CertType
-from openprovider.exceptions import *
-from openprovider.models import *
+from openprovider.exceptions import BadRequest
+from openprovider.models import Reseller, Address
 
 import textwrap
 
 
-class TestIntegration(tests.ApiTestCase):
-    """
-    A set of smoke tests that test the complete stack against the live API.
-    """
+class TestDomains(tests.ApiTestCase):
+    """Smoke tests for the domain module."""
+
     def test_domain_check_active(self):
+        """Obviously taken domains should return 'active'."""
         self.assertEqual(self.api.domains.check("example.com"), "active")
 
     def test_domain_check_free(self):
+        """Obviously free domain should return 'free'."""
         self.assertEqual(self.api.domains.check("oy6uT6caew3deej.com"), "free")
 
     def test_domain_check_invalid(self):
+        """All kinds of invalid domains should raise a BadRequest."""
         self.assertRaises(BadRequest, self.api.domains.check, "invalid.invalid")
-
-    def test_domain_check_short(self):
         self.assertRaises(BadRequest, self.api.domains.check, "a.com")
 
     def test_domain_check_many(self):
-        r = self.api.domains.check_many(["example.com", "example.net"])
-        self.assertEqual(r, {"example.com": "active", "example.net": "active"})
+        """Test for checking multiple domains."""
+        result = self.api.domains.check_many(["example.com", "example.net"])
+        self.assertEqual(result,
+                         {"example.com": "active", "example.net": "active"})
+
+
+class TestSSL(tests.ApiTestCase):
+    """Smoke tests for the SSL module."""
 
     def test_ssl_search_product(self):
-        r = self.api.ssl.search_product()
-        self.assertTrue(r[0].id)
+        """Test for the SSL product search method."""
+        result = self.api.ssl.search_product()
+        self.assertTrue(result[0].id)
 
     def test_ssl_retrieve_product(self):
-        r = self.api.ssl.retrieve_product(CertType.COMODO_EV_SSL)
-        self.assertEqual(r.id, CertType.COMODO_EV_SSL)
+        """Test for retrieving details on a single product."""
+        result = self.api.ssl.retrieve_product(CertType.COMODO_EV_SSL)
+        self.assertEqual(result.id, CertType.COMODO_EV_SSL)
 
     def test_ssl_order(self):
+        """Test that orders a SSL certificate, then cancels it."""
+
         csr = textwrap.dedent("""
         -----BEGIN CERTIFICATE REQUEST-----
         MIICzjCCAbYCAQAwgYgxCzAJBgNVBAYTAk5MMRMwEQYDVQQIDApPdmVyaWpzc2Vs
@@ -61,27 +76,32 @@ class TestIntegration(tests.ApiTestCase):
         cert = CertType.COMODO_ESSENTIALSSL
         cust = "YN000088-NL"
 
-        cn = "example.com"
-        e1 = "admin@example.com"
-        e2 = "administrator@example.com"
+        cname = "example.com"
+        mail1 = "admin@example.com"
+        mail2 = "administrator@example.com"
 
-        self.assertEqual(cn, self.api.ssl.decode_csr(csr).subject.commonName)
+        self.assertEqual(cname, self.api.ssl.decode_csr(csr).subject.commonName)
 
-        order = self.api.ssl.create(cert, 1, csr, "linux", cust, e1)
+        oid = self.api.ssl.create(cert, 1, csr, "linux", cust, mail1)
 
         self.assertTrue(cust,
-                        self.api.ssl.retrieve_order(order).organizationHandle)
-        self.assertTrue(order,
-                        self.api.ssl.change_approver_email_address(order, e2))
+                        self.api.ssl.retrieve_order(oid).organizationHandle)
 
-        self.assertEqual(order, self.api.ssl.resend_approver_email(order))
-        self.assertEqual(order, self.api.ssl.cancel(order))
+        self.assertTrue(oid,
+                        self.api.ssl.change_approver_email_address(oid, mail2))
+
+        self.assertEqual(oid, self.api.ssl.resend_approver_email(oid))
+        self.assertEqual(oid, self.api.ssl.cancel(oid))
 
     def test_ssl_approver_email(self):
+        """Test for retrieving a list of allowed approver email addresses."""
         cert = CertType.COMODO_ESSENTIALSSL
         emails = self.api.ssl.retrieve_approver_email_list("example.com", cert)
         self.assertTrue("admin@example.com" in emails)
 
+
+class TestReseller(tests.ApiTestCase):
+    """Smoke tests for the reseller module."""
     def test_reseller_retrieve(self):
         r = self.api.reseller.retrieve()
         self.assertTrue(isinstance(r, Reseller))

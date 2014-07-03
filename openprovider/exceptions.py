@@ -1,5 +1,8 @@
 # coding=utf-8
 
+"""
+Openprovider.py-specific exceptions.
+"""
 
 class OpenproviderError(Exception):
     """Superclass for all of our exceptions."""

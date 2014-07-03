@@ -1,10 +1,19 @@
 # coding=utf-8
 
+"""
+Contains a Response class for representing responses from the API.
+"""
+
 import lxml
 import lxml.objectify
 
 
 class Response(object):
+    """
+    Represents a response from OpenProvider. Unwraps the code, desc and data
+    fields in the response to attributes.
+    """
+
     tree = None
     reply = None
     code = None
