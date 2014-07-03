@@ -10,7 +10,7 @@ setup(
     version='0.0.1',
     author='Antagonist B.V.',
     author_email='info@antagonist.nl',
-    packages=['openprovider', 'openprovider.modules', 'openprovider.tests'],
+    packages=['openprovider', 'openprovider.modules', 'openprovider.tests', 'openprovider.data'],
     url='http://pypi.python.org/pypi/openprovider.py/',
     license='LICENSE.rst',
     description='An unofficial library for the OpenProvider API',
