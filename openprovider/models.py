@@ -137,3 +137,29 @@ class Reseller(Model):
     address = submodel(Address, "address")
     phone = submodel(Phone, "phone")
     fax = submodel(Phone, "fax")
+
+
+class SSLProduct(Model):
+    """
+    id
+    name
+    brandName
+    category
+    isMobileSupported
+    isIdnSupported
+    isSgcSupported
+    isWildcardSupported
+    isExtendedValidationSupported
+    deliveryTime
+    freeRefundPeriod
+    freeReissuePeriod
+    maxPeriod
+    numberOfDomains
+    encryption
+    root
+    warranty
+    prices
+    supportedSoftware
+    description
+    """
+    pass
