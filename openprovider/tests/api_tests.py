@@ -8,5 +8,7 @@ class ApiTestCase(unittest.TestCase):
     api = None
 
     def setUp(self):
+        username = 'antagonistbv-test'
+        password = 'antagonistbv'
         url = "https://api.cte.openprovider.eu"
-        self.api = openprovider.OpenProvider('antagonistbv-test', 'antagonistbv', url=url)
+        self.api = openprovider.OpenProvider(username, password, url=url)

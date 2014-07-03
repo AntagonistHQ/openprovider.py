@@ -1,5 +1,4 @@
 # coding=utf-8
-from lxml import etree
 
 from openprovider import tests
 from openprovider.data.sslcerts import CertType
@@ -63,14 +62,18 @@ class TestIntegration(tests.ApiTestCase):
         cust = "YN000088-NL"
 
         cn = "example.com"
-        email_1 = "admin@example.com"
-        email_2 = "administrator@example.com"
+        e1 = "admin@example.com"
+        e2 = "administrator@example.com"
 
         self.assertEqual(cn, self.api.ssl.decode_csr(csr).subject.commonName)
 
-        order = self.api.ssl.create(cert, 1, csr, "linux", cust, email_1)
-        self.assertEqual(cust, self.api.ssl.retrieve_order(order).organizationHandle)
-        self.assertEqual(order, self.api.ssl.change_approver_email_address(order, email_2))
+        order = self.api.ssl.create(cert, 1, csr, "linux", cust, e1)
+
+        self.assertTrue(cust,
+                        self.api.ssl.retrieve_order(order).organizationHandle)
+        self.assertTrue(order,
+                        self.api.ssl.change_approver_email_address(order, e2))
+
         self.assertEqual(order, self.api.ssl.resend_approver_email(order))
         self.assertEqual(order, self.api.ssl.cancel(order))
 

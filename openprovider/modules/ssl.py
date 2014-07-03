@@ -7,19 +7,21 @@ import textwrap
 
 
 class SSLModule(common.Module):
-    def search_product(self, limit=100, offset=0, **kwargs):
+    def search_product(self, limit=100, offset=0, **kw):
         e = self.e
         response = self.request(e.searchProductSslCertRequest(
             e.limit(limit),
             e.offset(offset),
-            e.withPrice(int(kwargs.get('with_price', 0))),
-            e.withSupportedSoftware(int(kwargs.get('with_supported_software', 0))),
-            e.withDescription(int(kwargs.get('with_description', 0)))
+            e.withPrice(int(kw.get('with_price', 0))),
+            e.withSupportedSoftware(int(kw.get('with_supported_software', 0))),
+            e.withDescription(int(kw.get('with_description', 0)))
         ))
         return [SSLProduct(p) for p in response.data.results.array[0].item]
 
     def retrieve_product(self, product_id):
-        response = self.request(self.e.retrieveProductSslCertRequest(self.e.id(product_id)))
+        response = self.request(self.e.retrieveProductSslCertRequest(
+            self.e.id(product_id)
+        ))
         return SSLProduct(response.data)
 
     def search_order(self, limit=100, offset=0, **kwargs):
@@ -31,10 +33,13 @@ class SSLModule(common.Module):
         return [SSLOrder(o) for o in response.data.results.array[0].item]
 
     def retrieve_order(self, order_id):
-        response = self.request(self.e.retrieveOrderSslCertRequest(self.e.id(order_id)))
+        response = self.request(self.e.retrieveOrderSslCertRequest(
+            self.e.id(order_id)
+        ))
         return SSLOrder(response.data)
 
-    def create(self, product_id, period, csr, software_id, organization_handle, approver_email, **kwargs):
+    def create(self, product_id, period, csr, software_id, organization_handle,
+               approver_email, **kwargs):
         e = self.e
         response = self.request(e.createSslCertRequest(
             e.productId(product_id),
@@ -50,7 +55,9 @@ class SSLModule(common.Module):
         pass
 
     def cancel(self, order_id):
-        response = self.request(self.e.cancelSslCertRequest(self.e.id(order_id)))
+        response = self.request(self.e.cancelSslCertRequest(
+            self.e.id(order_id)
+        ))
         return int(response.data.id)
 
     def retrieve_approver_email_list(self, domain, product_id):
@@ -61,7 +68,9 @@ class SSLModule(common.Module):
         return [str(i) for i in response.data.array[0].item]
 
     def resend_approver_email(self, order_id):
-        response = self.request(self.e.resendApproverEmailSslCertRequest(self.e.id(order_id)))
+        response = self.request(self.e.resendApproverEmailSslCertRequest(
+            self.e.id(order_id)
+        ))
         return int(response.data.id)
 
     def change_approver_email_address(self, order_id, approver_email):
@@ -72,4 +81,7 @@ class SSLModule(common.Module):
         return int(response.data.id)
 
     def decode_csr(self, csr):
-        return self.request(self.e.decodeCsrSslCertRequest(self.e.csr(csr))).data
+        response = self.request(self.e.decodeCsrSslCertRequest(
+            self.e.csr(csr)
+        ))
+        return response.data
