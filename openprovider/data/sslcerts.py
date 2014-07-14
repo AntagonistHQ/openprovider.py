@@ -1,4 +1,4 @@
-#_coding=utf-8
+# coding=utf-8
 
 """SSL-related constants and enums."""
 
@@ -35,3 +35,7 @@ class CertType(object):
     COMODO_INSTANT_SGC_WILDCARD_SSL = 26
     RAPIDSSL = 5
     RAPIDSSL_WILDCARD = 6
+
+    WILDCARD_CERTIFICATES = (GEOTRUST_TBID_WILDCARD, THAWTE_WEB_SERVER_WILDCARD,
+                             COMODO_ESSENTIALSSL_WILDCARD, COMODO_PREMIUMSSL_WILDCARD,
+                             COMODO_INSTANT_SGC_WILDCARD_SSL, RAPIDSSL_WILDCARD)
