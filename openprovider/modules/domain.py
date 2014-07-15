@@ -8,19 +8,21 @@ class DomainModule(common.Module):
 
     def check(self, domain):
         """
-        Check availability for a single domain. Returns the domain's status
-        as a string (either "active" or "free").
+        Check availability for a single domain. Returns the domain's status as
+        a string (either "active" or "free").
         """
         response = self.request(self._check_cmd([domain]))
         return response.data.array[0].item[0].status
 
     def check_many(self, domains):
         """
-        Check availability for a number of domains. Returns a dictionary mapping
-        the domain names to their statuses as a string ("active"/"free").
+        Check availability for a number of domains. Returns a dictionary
+        mapping the domain names to their statuses as a string
+        ("active"/"free").
         """
         response = self.request(self._check_cmd(domains))
-        return dict([(i.domain, i.status) for i in response.data.array[0].item])
+        items = response.data.array[0].item
+        return dict([(i.domain, i.status) for i in items])
 
     def _check_cmd(self, domains):
         e = self.e

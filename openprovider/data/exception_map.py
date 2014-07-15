@@ -1,6 +1,8 @@
 # coding=utf-8
 
-"""Provides a mapping from OpenProvider API error codes to Python exceptions."""
+"""
+Provides a mapping from OpenProvider API error codes to Python exceptions.
+"""
 
 from openprovider.exceptions import *
 
@@ -68,7 +70,7 @@ MAPPING = {
     168: ValidationError,       # Empty website field!
     169: ValidationError,       # Invalid website field!
     170: ValidationError,       # Empty type field!
-    171: UniqueViolation,       # A contact person with this type already exists
+    171: UniqueViolation,       # A contact person with type already exists
     172: ValidationError,       # Invalid customer type
     173: ServerError,           # ERROR while saving contact data
     174: ServerError,           # ERROR requesting external contactdata
@@ -108,15 +110,15 @@ MAPPING = {
     230: UniqueViolation,       # Nameserver is already present in your account
     231: ValidationError,       # IP is not specified
     232: ValidationError,       # Empty nameserver IP-2 field!
-    233: ValidationError,       # Invalid characters in nameserver IP-2 address!
+    233: ValidationError,       # Invalid characters in nameserver IP-2 address
     235: ValidationError,       # Empty nameserver name NS-3 field!
     236: ValidationError,       # Invalid nameserver name NS-3 field!
     237: ValidationError,       # Empty nameserver IP-3 field!
-    238: ValidationError,       # Invalid characters in nameserver IP-3 address!
+    238: ValidationError,       # Invalid characters in nameserver IP-3 address
     240: ValidationError,       # Empty nameserver name NS-4 field!
     241: ValidationError,       # Invalid nameserver name NS-4 field!
     242: ValidationError,       # Empty nameserver IP-4 field!
-    243: ValidationError,       # Invalid characters in nameserver IP-4 address!
+    243: ValidationError,       # Invalid characters in nameserver IP-4 address
     244: RuleViolation,         # The nameservercheck returned errors
     245: ValidationError,       # Nameserver-update failed
     299: ServerError,           # An unknown nameserver-error has occurred
@@ -138,7 +140,7 @@ MAPPING = {
     316: ValidationError,       # Invalid period!
     317: ValidationError,       # Empty authorization code!
     318: ValidationError,       # Authorization code is incorrect or missing.
-    320: NoSuchElement,         # The domain is not in your Openprovider account
+    320: NoSuchElement,         # The domain is not in your account
     321: RuleViolation,         # Domains with extension cannot be traded
     322: RuleViolation,         # Domains with extension cannot be transferred
     323: BadStateException,     # This is an internal transfer
@@ -163,13 +165,13 @@ MAPPING = {
     346: UniqueViolation,       # Reseller cannot add duplicate domain
     347: ValidationError,       # Wrong auto renew value
     360: RuleViolation,         # Nameservers in different subnets required
-    361: RuleViolation,         # Owner or administrative contact must be German
-    362: RuleViolation,         # Domain is already registered in Openprovider.
-    363: RuleViolation,         # Domain is not registered in Openprovider.
-    364: RuleViolation,         # Owner handle must differ from the current one.
+    361: RuleViolation,         # Owner or administrative contact not German
+    362: RuleViolation,         # Domain is already registered with us
+    363: RuleViolation,         # Domain is not registered with us
+    364: RuleViolation,         # Owner handle must differ from the current one
     365: RuleViolation,         # This domain belongs to other reseller.
-    366: BadStateException,     # This action is prohibitted for current status.
-    367: BadStateException,     # Domain cannot be locked because of its status.
+    366: BadStateException,     # This action is prohibitted for current status
+    367: BadStateException,     # Domain cannot be locked because of its status
     380: ValidationError,       # Need first name to register an .it domain
     381: ValidationError,       # Need state to register an .it domain
     382: ValidationError,       # Need fiscal number to register an .it domain
@@ -321,7 +323,7 @@ MAPPING = {
     1045: ValidationError,      # Invalid e-mail address for approver
     1046: RuleViolation,        # E-mail address for approver is not allowed
     1083: BadStateException,    # Certificate reissue from incomplete order
-    1084: RuleViolation,        # Order does not belong to this reseller account
+    1084: RuleViolation,        # Order does not belong to this reselleraccount
     1085: BadRequest,           # SSL plugin does not support this method
     1086: ServerError,          # An unknown error occurred when processing
     1087: InProgress,           # Order is being processed by CA
@@ -342,7 +344,7 @@ MAPPING = {
     1102: ValidationError,      # Valid domain name required
     1103: ValidationError,      # Valid e-mail address required
     1105: ValidationError,      # Logo required
-    1106: ValidationError,      # Invalid logo file type: should be .gif or .jpg
+    1106: ValidationError,      # Invalid logo file type: should be gif or jpg
     1107: ValidationError,      # Invalid logo dimensions: 600px by 280px max
     1108: ValidationError,      # Invalid product id(s)
     1109: ValidationError,      # Empty product id(s)
@@ -358,7 +360,7 @@ MAPPING = {
     1921: ValidationError,      # No birth date has been entered
     1922: ValidationError,      # Birth date is not formatted as dd-mm-yyyy
     1923: ValidationError,      # No birth place has been entered
-    1924: RuleViolation,        # Owner and administrative contact aren't French
+    1924: RuleViolation,        # Owner and administrative contact arent French
     1925: ValidationError,      # No passport number has been entered
     1926: ValidationError,      # Please check customer's details.
     2001: ServerError,          # Uploading the file failed.
@@ -400,23 +402,23 @@ MAPPING = {
     5005: RuleViolation,        # Contact cannot remove himself.
     5006: ValidationError,      # Bad password specified.
     5007: ValidationError,      # Passwords are not equal.
-    6001: ValidationError,      # Additional data: Invalid birth city.
-    6002: ValidationError,      # Additional data: Invalid birth address.
-    6003: ValidationError,      # Additional data: Empty birth country.
-    6004: ValidationError,      # Additional data: Invalid birth country.
-    6005: ValidationError,      # Additional data: Invalid birth date.
-    6006: ValidationError,      # Additional data: Invalid birth state.
-    6007: ValidationError,      # Additional data: Invalid birth zipcode
-    6008: ValidationError,      # Additional data: Invalid headquarters address.
-    6009: ValidationError,      # Additional data: Invalid headquarters city.
-    6010: ValidationError,      # Additional data: Empty headquarters country.
-    6011: ValidationError,      # Additional data: Invalid headquarters country.
-    6012: ValidationError,      # Additional data: Invalid headquarters state.
-    6013: ValidationError,      # Additional data: Invalid headquarters zipcode.
-    6014: ValidationError,      # Additional data: Invalid socialsecurity number
-    6015: ValidationError,      # Additional data: Invalid city.
-    6016: ValidationError,      # Additional data: Invalid number.
-    6017: ValidationError,      # Additional data: Invalid subscription date.
+    6001: ValidationError,      # AdditionalData: Invalid birth city.
+    6002: ValidationError,      # AdditionalData: Invalid birth address.
+    6003: ValidationError,      # AdditionalData: Empty birth country.
+    6004: ValidationError,      # AdditionalData: Invalid birth country.
+    6005: ValidationError,      # AdditionalData: Invalid birth date.
+    6006: ValidationError,      # AdditionalData: Invalid birth state.
+    6007: ValidationError,      # AdditionalData: Invalid birth zipcode
+    6008: ValidationError,      # AdditionalData: Invalid headquarters address
+    6009: ValidationError,      # AdditionalData: Invalid headquarters city
+    6010: ValidationError,      # AdditionalData: Empty headquarters country
+    6011: ValidationError,      # AdditionalData: Invalid headquarters country
+    6012: ValidationError,      # AdditionalData: Invalid headquarters state
+    6013: ValidationError,      # AdditionalData: Invalid headquarters zipcode
+    6014: ValidationError,      # AdditionalData: Invalid socialsecurity number
+    6015: ValidationError,      # AdditionalData: Invalid city.
+    6016: ValidationError,      # AdditionalData: Invalid number.
+    6017: ValidationError,      # AdditionalData: Invalid subscription date.
     6200: RuleViolation,        # Cannot delete a customer that has domain(s).
     7000: ValidationError,      # Question ID is empty
     7001: ValidationError,      # Question ID is invalid
@@ -438,8 +440,8 @@ MAPPING = {
 
 def from_code(code):
     """
-    Return the specific exception class for the given code, or OpenproviderError
-    if no specific exception class is available.
+    Return the specific exception class for the given code, or
+    OpenproviderError if no specific exception class is available.
 
     @param code: The error code from Openprovider.
     """

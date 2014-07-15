@@ -99,10 +99,12 @@ class SSLModule(common.Module):
     def change_approver_email_address(self, order_id, approver_email):
         """Change the approver email address for an ordered SSL certificate."""
 
-        response = self.request(self.e.changeApproverEmailAddressSslCertRequest(
-            self.e.id(order_id),
-            self.e.approverEmail(approver_email)
-        ))
+        response = self.request(
+            self.e.changeApproverEmailAddressSslCertRequest(
+                self.e.id(order_id),
+                self.e.approverEmail(approver_email)
+            )
+        )
 
         return int(response.data.id)
 

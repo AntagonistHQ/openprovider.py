@@ -36,6 +36,7 @@ class AuthenticationError(BadRequest):
 class NoSuchElement(OpenproviderError):
     """The element you tried to retrieve could not be found."""
 
+
 class InProgress(OpenproviderError):
     """The request is currently being handled but has not finished yet."""
 

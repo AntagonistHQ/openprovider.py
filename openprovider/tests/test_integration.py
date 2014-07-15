@@ -26,7 +26,7 @@ class TestDomains(tests.ApiTestCase):
 
     def test_domain_check_invalid(self):
         """All kinds of invalid domains should raise a BadRequest."""
-        self.assertRaises(BadRequest, self.api.domains.check, "invalid.invalid")
+        self.assertRaises(BadRequest, self.api.domains.check, "a.invalid")
         self.assertRaises(BadRequest, self.api.domains.check, "a.com")
 
     def test_domain_check_many(self):
@@ -80,7 +80,8 @@ class TestSSL(tests.ApiTestCase):
         mail1 = "admin@example.com"
         mail2 = "administrator@example.com"
 
-        self.assertEqual(cname, self.api.ssl.decode_csr(csr).subject.commonName)
+        decoded_csr = self.api.ssl.decode_csr(csr)
+        self.assertEqual(cname, decoded_csr.subject.commonName)
 
         oid = self.api.ssl.create(cert, 1, csr, "linux", cust, mail1)
 

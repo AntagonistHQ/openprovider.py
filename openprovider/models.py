@@ -22,9 +22,9 @@ class Model(object):
 
     def __getattr__(self, attr):
         """
-        Magic for returning an attribute. Will try the attributes of the wrapper
-        class first, then attributes in self.attrs, then the attributes of the
-        wrapped objectified element.
+        Magic for returning an attribute. Will try the attributes of the
+        wrapper class first, then attributes in self.attrs, then the attributes
+        of the wrapped objectified element.
         """
 
         if attr in self.__dict__:
@@ -159,7 +159,9 @@ class Phone(Model):
 
     def __str__(self):
         """Returns the parts of the phone number seperated by spaces."""
-        fmt = " ".join((self.countryCode, self.areaCode, self.subscriberNumber))
+        fmt = " ".join((self.countryCode,
+                        self.areaCode,
+                        self.subscriberNumber))
         return fmt
 
 
