@@ -47,7 +47,7 @@ class TestExtensions(tests.ApiTestCase):
     def test_retrieve_extension(self):
         """Retrieve should return a proper Extension."""
         r = self.api.extensions.retrieve_extension("nl", with_description=True)
-        self.assertIsNotNone(r.description)
+        self.assertTrue(r.description is not None)
 
 
 class TestSSL(tests.ApiTestCase):
