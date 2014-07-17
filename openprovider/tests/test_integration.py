@@ -36,6 +36,20 @@ class TestDomains(tests.ApiTestCase):
                          {"example.com": "active", "example.net": "active"})
 
 
+class TestExtensions(tests.ApiTestCase):
+    """Smoke tests for the extensions module."""
+
+    def test_search_extension(self):
+        """Search should return something sensible."""
+        r = self.api.extensions.search_extension(with_usage_count=True)
+        self.assertTrue(r[0].usage_count >= 0)
+
+    def test_retrieve_extension(self):
+        """Retrieve should return a proper Extension."""
+        r = self.api.extensions.retrieve_extension("nl", with_description=True)
+        self.assertIsNotNone(r.description)
+
+
 class TestSSL(tests.ApiTestCase):
     """Smoke tests for the SSL module."""
 
