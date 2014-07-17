@@ -27,20 +27,34 @@ class Model(object):
         wrapper class first, then attributes in self.attrs, then the attributes
         of the wrapped objectified element.
 
-        Will try a camelCased version of the snake_cased input as well: in other
-        words, foo.company_name will return foo.companyName.
+        Will try a camelCased version of the snake_cased input if the attribute
+        contains an underscore. This means foo.company_name will return the same
+        as foo.companyName.
         """
 
+        if "_" in attr:
+            attr = snake_to_camel(attr)
+
         if attr in self.__dict__:
+            # Check ourselves first no avoid infinite loops
             return getattr(self, attr)
-        elif snake_to_camel(attr) in self.__dict__:
-            return getattr(self, snake_to_camel(attr))
         elif attr in self.attrs:
+            # Then check manual attributes from the constructor
             return self.attrs[attr]
-        elif snake_to_camel(attr) in self.attrs:
-            return self.attrs[snake_to_camel(attr)]
-        else:
+        elif hasattr(self._obj, attr):
+            # Finally check the wrapped object
             return getattr(self._obj, attr)
+        else:
+            # No match, raise a custom AttributeError.
+            attr_keys = self.attrs.keys()
+
+            if self._obj:
+                obj_keys = [t.tag for t in self._obj.iterchildren()]
+            else:
+                obj_keys = []
+
+            raise AttributeError("Model has no attribute '%s' (tried '%s')"
+                                 % (attr, "', '".join(attr_keys + obj_keys)))
 
     def get_elem(self):
         """Returns the wrapped lxml element, if one exists, or else None."""
@@ -261,5 +275,24 @@ class SSLOrder(Model):
     csr
     certificate
     rootCertificate
+    """
+    pass
+
+
+class Extension(Model):
+    """
+    A domain extension (TLD).
+
+    name
+    transferAvailable
+    isTransferAuthCodeRequired
+    domicileAvailable
+    usageCount
+    description
+    prices
+    isAuthorizationCodeRequired
+    isLockingAllowed
+    isTradeAllowed
+    restorePrice
     """
     pass
