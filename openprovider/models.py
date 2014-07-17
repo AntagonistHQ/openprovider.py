@@ -6,6 +6,7 @@ objectified versions of API responses.
 """
 
 import lxml.etree
+from openprovider.util import snake_to_camel
 
 
 class Model(object):
@@ -25,12 +26,19 @@ class Model(object):
         Magic for returning an attribute. Will try the attributes of the
         wrapper class first, then attributes in self.attrs, then the attributes
         of the wrapped objectified element.
+
+        Will try a camelCased version of the snake_cased input as well: in other
+        words, foo.company_name will return foo.companyName.
         """
 
         if attr in self.__dict__:
             return getattr(self, attr)
+        elif snake_to_camel(attr) in self.__dict__:
+            return getattr(self, snake_to_camel(attr))
         elif attr in self.attrs:
             return self.attrs[attr]
+        elif snake_to_camel(attr) in self.attrs:
+            return self.attrs[snake_to_camel(attr)]
         else:
             return getattr(self._obj, attr)
 

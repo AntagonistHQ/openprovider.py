@@ -15,6 +15,11 @@ class TestModels(unittest.TestCase):
         self.assertEqual(mod.foo, "foo")
         self.assertEqual(mod.bar.baz, "baz")
 
+    def test_case_alias(self):
+        """Tests Model's case-aliasing magic."""
+        mod = Model(spamAndEggs="Spam, spam, glorious spam")
+        self.assertTrue(mod.spam_and_eggs)
+
     def test_name_str(self):
         """Tests the Name model and its string conversion."""
         leo = Name(firstName="Leonardo", prefix="da", lastName="Vinci")
