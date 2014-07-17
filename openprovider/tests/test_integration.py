@@ -107,3 +107,14 @@ class TestReseller(tests.ApiTestCase):
         r = self.api.reseller.retrieve()
         self.assertTrue(isinstance(r, Reseller))
         self.assertTrue(isinstance(r.address, Address))
+
+
+class TestCustomer(tests.ApiTestCase):
+    """Smoke tests for the customer module."""
+    def test_customer_search(self):
+        r = self.api.customers.search_customer()
+        print r
+        self.assertTrue(len(r) >= 1)
+
+        r = self.api.customers.search_customer(email_pattern="doesntexist.com")
+        self.assertTrue(len(r) == 0)

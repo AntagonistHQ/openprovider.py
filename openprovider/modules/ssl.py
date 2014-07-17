@@ -18,7 +18,7 @@ class SSLModule(common.Module):
             e.withSupportedSoftware(int(kw.get('with_supported_software', 0))),
             e.withDescription(int(kw.get('with_description', 0)))
         ))
-        return [SSLProduct(p) for p in response.data.results.array[0].item]
+        return response.as_models(SSLProduct)
 
     def retrieve_product(self, product_id):
         """Retrieve details on a single product."""
@@ -27,7 +27,7 @@ class SSLModule(common.Module):
             self.e.id(product_id)
         ))
 
-        return SSLProduct(response.data)
+        return response.as_model(SSLProduct)
 
     def search_order(self, limit=100, offset=0, **kwargs):
         """Search all SSL certificate orders."""
@@ -38,7 +38,7 @@ class SSLModule(common.Module):
             e.offset(offset)
         ))
 
-        return [SSLOrder(o) for o in response.data.results.array[0].item]
+        return response.as_models(SSLOrder)
 
     def retrieve_order(self, order_id):
         """Retrieve details on a single order."""
@@ -47,7 +47,7 @@ class SSLModule(common.Module):
             self.e.id(order_id)
         ))
 
-        return SSLOrder(response.data)
+        return response.as_model(SSLOrder)
 
     def create(self, product_id, period, csr, software_id, organization_handle,
                approver_email, **kwargs):

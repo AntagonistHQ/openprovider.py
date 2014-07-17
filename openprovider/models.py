@@ -184,6 +184,26 @@ class Reseller(Model):
     fax = submodel(Phone, "fax")
 
 
+class Customer(Model):
+    """
+    A customer.
+
+    handle
+    companyName
+    vat
+    name
+    gender
+    address
+    phone
+    fax
+    email
+    """
+
+    address = submodel(Address, "address")
+    phone = submodel(Phone, "phone")
+    fax = submodel(Phone, "fax")
+
+
 class SSLProduct(Model):
     """
     An SSL product.
