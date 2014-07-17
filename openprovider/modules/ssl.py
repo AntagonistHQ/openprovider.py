@@ -65,8 +65,19 @@ class SSLModule(common.Module):
 
         return int(response.data.id)
 
-    def reissue(self):
-        pass
+    def reissue(self, order_id, csr, software_id, organization_handle, approver_email):
+        """Reissue an SSL certificate order"""
+
+        e = self.e
+        response = self.request(e.reissueSslCertRequest(
+            e.id(order_id),
+            e.csr(csr),
+            e.softwareId(software_id),
+            e.organizationHandle(organization_handle),
+            e.approverEmail(approver_email),
+        ))
+
+        return int(response.data.id)
 
     def cancel(self, order_id):
         """Cancel an ordered SSL certificate."""
