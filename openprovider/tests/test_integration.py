@@ -6,7 +6,7 @@ entire library.
 """
 
 from openprovider import tests
-from openprovider.data.sslcerts import CertType
+from openprovider.data.sslcerts import CertTypes
 from openprovider.exceptions import BadRequest
 from openprovider.models import Reseller, Address
 
@@ -60,8 +60,8 @@ class TestSSL(tests.ApiTestCase):
 
     def test_ssl_retrieve_product(self):
         """Test for retrieving details on a single product."""
-        result = self.api.ssl.retrieve_product(CertType.COMODO_EV_SSL)
-        self.assertEqual(result.id, CertType.COMODO_EV_SSL)
+        result = self.api.ssl.retrieve_product(CertTypes.COMODO_EV_SSL)
+        self.assertEqual(result.id, CertTypes.COMODO_EV_SSL)
 
     def test_ssl_order(self):
         """Test that orders a SSL certificate, then cancels it."""
@@ -87,7 +87,7 @@ class TestSSL(tests.ApiTestCase):
         -----END CERTIFICATE REQUEST-----
         """).strip()
 
-        cert = CertType.COMODO_ESSENTIALSSL
+        cert = CertTypes.COMODO_ESSENTIALSSL
         cust = "YN000088-NL"
 
         cname = "example.com"
@@ -110,7 +110,7 @@ class TestSSL(tests.ApiTestCase):
 
     def test_ssl_approver_email(self):
         """Test for retrieving a list of allowed approver email addresses."""
-        cert = CertType.COMODO_ESSENTIALSSL
+        cert = CertTypes.COMODO_ESSENTIALSSL
         emails = self.api.ssl.retrieve_approver_email_list("example.com", cert)
         self.assertTrue("admin@example.com" in emails)
 
