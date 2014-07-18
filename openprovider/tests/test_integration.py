@@ -60,8 +60,8 @@ class TestSSL(tests.ApiTestCase):
 
     def test_ssl_retrieve_product(self):
         """Test for retrieving details on a single product."""
-        result = self.api.ssl.retrieve_product(CertTypes.COMODO_EV_SSL)
-        self.assertEqual(result.id, CertTypes.COMODO_EV_SSL)
+        res = self.api.ssl.retrieve_product(CertTypes.COMODO_EV_SSL.product_id)
+        self.assertEqual(res.id, CertTypes.COMODO_EV_SSL.product_id)
 
     def test_ssl_order(self):
         """Test that orders a SSL certificate, then cancels it."""
@@ -87,7 +87,7 @@ class TestSSL(tests.ApiTestCase):
         -----END CERTIFICATE REQUEST-----
         """).strip()
 
-        cert = CertTypes.COMODO_ESSENTIALSSL
+        cert = CertTypes.COMODO_ESSENTIALSSL.product_id
         cust = "YN000088-NL"
 
         cname = "example.com"
@@ -110,7 +110,7 @@ class TestSSL(tests.ApiTestCase):
 
     def test_ssl_approver_email(self):
         """Test for retrieving a list of allowed approver email addresses."""
-        cert = CertTypes.COMODO_ESSENTIALSSL
+        cert = CertTypes.COMODO_ESSENTIALSSL.product_id
         emails = self.api.ssl.retrieve_approver_email_list("example.com", cert)
         self.assertTrue("admin@example.com" in emails)
 
