@@ -216,6 +216,7 @@ class Customer(Model):
     email
     """
 
+    name = submodel(Name, "name")
     address = submodel(Address, "address")
     phone = submodel(Phone, "phone")
     fax = submodel(Phone, "fax")
