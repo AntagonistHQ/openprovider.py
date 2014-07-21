@@ -18,11 +18,6 @@ from openprovider.data.exception_map import from_code
 class OpenProvider(object):
     """A connection to the OpenProvider API."""
 
-    username = None
-    password = None
-
-    http = None
-
     def __init__(self, username, password, url="https://api.openprovider.eu"):
         """Initializes the connection with the given username and password."""
         self.username = username

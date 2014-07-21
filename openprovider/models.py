@@ -14,12 +14,9 @@ class Model(object):
     Superclass for all models. Delegates attribute access to a wrapped class.
     """
 
-    _obj = None
-    attrs = {}
-
     def __init__(self, obj=None, **kwargs):
         self._obj = obj
-        self.attrs.update(kwargs)
+        self.attrs = kwargs
 
     def __getattr__(self, attr):
         """

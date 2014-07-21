@@ -14,13 +14,6 @@ class Response(object):
     fields in the response to attributes.
     """
 
-    tree = None
-    reply = None
-    code = None
-    desc = None
-    data = None
-    array = None
-
     def __init__(self, tree):
         self.tree = tree
 
