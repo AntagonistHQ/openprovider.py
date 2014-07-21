@@ -5,6 +5,9 @@ from string import maketrans
 import re
 
 
+PHONE_REGEX = re.compile(r'^(\+\d+)\.(\d)(\d+)$')
+
+
 def camel_to_snake(string):
     """Converts camelCaseString to snake_case_string."""
     return re.sub('([A-Z]+)', r'_\1', string).lower()
@@ -14,6 +17,20 @@ def snake_to_camel(value):
     """Converts snake_case_string to camelCaseString."""
     camel = "".join(word.title() for word in value.split("_"))
     return value[:1].lower() + camel[1:]
+
+
+def parse_phone_number(number):
+    if isinstance(number, basestring):
+        match = PHONE_REGEX.search(number)
+        if not match:
+            raise ValueError("Invalid phone number")
+        return match.groups()
+    elif isinstance(number, (tuple, list)):
+        if len(number) != 3:
+            raise ValueError("Invalid phone number")
+        return number
+    else:
+        raise ValueError("Invalid phone number")
 
 
 def generate_cert_types(products):
