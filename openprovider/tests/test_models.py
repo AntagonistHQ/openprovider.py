@@ -17,12 +17,12 @@ class TestModels(unittest.TestCase):
 
     def test_case_alias(self):
         """Tests Model's case-aliasing magic."""
-        mod = Model(spamAndEggs="Spam, spam, glorious spam")
+        mod = Model(spam_and_eggs="Spam, spam, glorious spam")
         self.assertTrue(mod.spam_and_eggs)
 
     def test_name_str(self):
         """Tests the Name model and its string conversion."""
-        leo = Name(firstName="Leonardo", prefix="da", lastName="Vinci")
+        leo = Name(first_name="Leonardo", prefix="da", last_name="Vinci")
         self.assertEqual(str(leo), "Leonardo da Vinci")
 
     def test_domain_str(self):
@@ -36,5 +36,5 @@ class TestModels(unittest.TestCase):
         area = "026"
         subscr = "3557772"
 
-        p = Phone(countryCode=country, areaCode=area, subscriberNumber=subscr)
+        p = Phone(country_code=country, area_code=area, subscriber_number=subscr)
         self.assertEqual(str(p), "+31 026 3557772")

@@ -45,11 +45,14 @@ class Model(object):
         try:
             return self._attrs[attr]
         except KeyError:
-            try:
-                return (self._obj or {})[attr]
-            except (KeyError, AttributeError):
-                raise AttributeError("Model has no attribute '%s' (tried %r)"
-                                     % (camel_to_snake(attr), dir(self)))
+            if self._obj is not None:
+                try:
+                    return self._obj[attr]
+                except KeyError:
+                    pass
+
+        raise AttributeError("Model has no attribute '%s' (tried %r)"
+                             % (camel_to_snake(attr), dir(self)))
 
     def get_elem(self):
         """Returns the wrapped lxml element, if one exists, or else None."""
@@ -83,9 +86,9 @@ class Name(Model):
 
     def __str__(self):
         if hasattr(self, "prefix"):
-            return " ".join((self.firstName, self.prefix, self.lastName))
+            return " ".join((self.first_name, self.prefix, self.last_name))
         else:
-            return " ".join((self.firstName, self.lastName))
+            return " ".join((self.firs_name, self.last_name))
 
 
 class Domain(Model):
