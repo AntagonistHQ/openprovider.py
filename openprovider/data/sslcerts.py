@@ -16,6 +16,18 @@ class CertType(object):
         self.is_sgc = is_sgc
         self.is_wildcard = is_wildcard
 
+    @property
+    def is_dv(self):
+        return self.validation == "DV"
+
+    @property
+    def is_ov(self):
+        return self.validation == "OV"
+
+    @property
+    def is_ev(self):
+        return self.validation == "EV"
+
     def __str__(self):
         return self.vendor + " " + self.name
 
@@ -35,15 +47,15 @@ class BaseCertTypes(object):
 
     @classmethod
     def dv_certs(cls):
-        return (cert for cert in cls.all() if cert.validation == "DV")
+        return (cert for cert in cls.all() if cert.is_dv)
 
     @classmethod
     def ov_certs(cls):
-        return (cert for cert in cls.all() if cert.validation == "OV")
+        return (cert for cert in cls.all() if cert.is_ov)
 
     @classmethod
     def ev_certs(cls):
-        return (cert for cert in cls.all() if cert.validation == "EV")
+        return (cert for cert in cls.all() if cert.is_ev)
 
     @classmethod
     def multis(cls):
