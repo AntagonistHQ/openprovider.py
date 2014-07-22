@@ -6,7 +6,7 @@ objectified versions of API responses.
 """
 
 import lxml.etree
-from openprovider.util import snake_to_camel
+from openprovider.util import camel_to_snake, snake_to_camel
 
 
 class Model(object):
@@ -14,17 +14,20 @@ class Model(object):
     Superclass for all models. Delegates attribute access to a wrapped class.
     """
 
-    _obj = None
-    attrs = {}
-
     def __init__(self, obj=None, **kwargs):
         self._obj = obj
-        self.attrs.update(kwargs)
+        self._attrs = dict((snake_to_camel(key), value) for (key, value) in kwargs.items())
+
+    def __dir__(self):
+        attrs = set(self.__dict__.keys() + [camel_to_snake(key) for key in self._attrs.keys()])
+        if self._obj:
+            attrs.update(camel_to_snake(t.tag) for t in self._obj.iterchildren())
+        return [attr for attr in attrs if not attr.startswith('_')]
 
     def __getattr__(self, attr):
         """
         Magic for returning an attribute. Will try the attributes of the
-        wrapper class first, then attributes in self.attrs, then the attributes
+        wrapper class first, then attributes in self._attrs, then the attributes
         of the wrapped objectified element.
 
         Will try a camelCased version of the snake_cased input if the attribute
@@ -38,23 +41,15 @@ class Model(object):
         if attr in self.__dict__:
             # Check ourselves first no avoid infinite loops
             return getattr(self, attr)
-        elif attr in self.attrs:
-            # Then check manual attributes from the constructor
-            return self.attrs[attr]
-        elif hasattr(self._obj, attr):
-            # Finally check the wrapped object
-            return getattr(self._obj, attr)
-        else:
-            # No match, raise a custom AttributeError.
-            attr_keys = self.attrs.keys()
 
-            if self._obj:
-                obj_keys = [t.tag for t in self._obj.iterchildren()]
-            else:
-                obj_keys = []
-
-            raise AttributeError("Model has no attribute '%s' (tried '%s')"
-                                 % (attr, "', '".join(attr_keys + obj_keys)))
+        try:
+            return self._attrs[attr]
+        except KeyError:
+            try:
+                return (self._obj or {})[attr]
+            except (KeyError, AttributeError):
+                raise AttributeError("Model has no attribute '%s' (tried %r)"
+                                     % (camel_to_snake(attr), dir(self)))
 
     def get_elem(self):
         """Returns the wrapped lxml element, if one exists, or else None."""
@@ -221,6 +216,7 @@ class Customer(Model):
     email
     """
 
+    name = submodel(Name, "name")
     address = submodel(Address, "address")
     phone = submodel(Phone, "phone")
     fax = submodel(Phone, "fax")

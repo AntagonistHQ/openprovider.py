@@ -9,7 +9,6 @@ interchangably.
 class HttpClient(object):
     """Superclass for all the HTTP client adapter implementations."""
 
-    url = None
     headers = {"User-Agent": "openprovider.py/0.1"}
 
     def __init__(self, url):
@@ -32,7 +31,6 @@ class RequestsHttpClient(HttpClient):
     HttpClient implementation based on the Requests library. Does connection
     pooling, keep-alive and SSL verification. Preferred.
     """
-    session = None
 
     def __init__(self, url):
         super(RequestsHttpClient, self).__init__(url)

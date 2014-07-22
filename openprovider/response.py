@@ -14,13 +14,6 @@ class Response(object):
     fields in the response to attributes.
     """
 
-    tree = None
-    reply = None
-    code = None
-    desc = None
-    data = None
-    array = None
-
     def __init__(self, tree):
         self.tree = tree
 
@@ -31,7 +24,7 @@ class Response(object):
 
         try:
             self.array = self.tree.reply.array[0]
-        except AttributeError as e:
+        except AttributeError:
             self.array = []
 
     def as_model(self, klass):
@@ -40,14 +33,10 @@ class Response(object):
 
     def as_models(self, klass):
         """Turns an array-style response into a list of models."""
-        out = []
         try:
-            for mod in self.tree.reply.data.results.array[0].item:
-                out.append(klass(mod))
-        except AttributeError as e:
+            return [klass(mod) for mod in self.tree.reply.data.results.array[0].item]
+        except AttributeError:
             return []
-        else:
-            return out
 
     def __str__(self):
         return lxml.etree.tostring(self.tree, pretty_print=True)

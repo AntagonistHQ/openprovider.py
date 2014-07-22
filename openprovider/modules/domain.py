@@ -22,7 +22,7 @@ class DomainModule(common.Module):
         """
         response = self.request(self._check_cmd(domains))
         items = response.data.array[0].item
-        return dict([(i.domain, i.status) for i in items])
+        return dict((i.domain, i.status) for i in items)
 
     def _check_cmd(self, domains):
         e = self.e
