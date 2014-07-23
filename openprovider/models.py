@@ -48,7 +48,7 @@ class Model(object):
             if self._obj is not None:
                 try:
                     return self._obj[attr]
-                except KeyError:
+                except (AttributeError, KeyError):
                     pass
 
         raise AttributeError("Model has no attribute '%s' (tried %r)"
@@ -74,6 +74,27 @@ def submodel(klass, key):
     def getter(self):
         return klass(getattr(self._obj, key))
     return property(getter)
+
+
+def textattribute(attr):
+    # TODO: Lots of duplication with __getattr__
+    def getter(self):
+        try:
+            return self._attrs[attr]
+        except KeyError:
+            if self.get_elem() is not None:
+                try:
+                    return self.get_elem()[attr].text
+                except (AttributeError, KeyError):
+                    pass
+
+        raise AttributeError("Model has no attribute '%s' (tried %r)"
+                             % (camel_to_snake(attr), dir(self)))
+
+    def setter(self, value):
+        self._attrs[attr] = value
+
+    return property(getter, setter)
 
 
 class Name(Model):
@@ -178,10 +199,14 @@ class Phone(Model):
     """
     An international phone number.
 
-    countryCode (required)
-    areaCode (required)
-    subscriberNumber (required)
+    country_code (required)
+    area_code (required)
+    subscriber_number (required)
     """
+
+    country_code = textattribute("countryCode")
+    area_code = textattribute("areaCode")
+    subscriber_number = textattribute("subscriberNumber")
 
     def __str__(self):
         """Return the string representation of phone number."""
