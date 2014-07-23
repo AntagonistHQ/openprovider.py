@@ -62,6 +62,12 @@ class Model(object):
         """Dumps a representation of the Model on standard output."""
         lxml.etree.dump(self._obj, *args, **kwargs)
 
+    def __repr__(self):
+        return "<%s.%s: %s>" % (type(self).__module__, type(self).__name__, self)
+
+    def __str__(self):
+        return lxml.etree.tostring(self._obj)
+
 
 def submodel(klass, key):
     """Shortcut for defining a submodel (has-a relation)."""
@@ -178,11 +184,8 @@ class Phone(Model):
     """
 
     def __str__(self):
-        """Returns the parts of the phone number seperated by spaces."""
-        fmt = " ".join((self.countryCode,
-                        self.areaCode,
-                        self.subscriberNumber))
-        return fmt
+        """Return the string representation of phone number."""
+        return "%s %s %s" % (self.country_code, self.area_code, self.subscriber_number)
 
 
 class Reseller(Model):
@@ -223,6 +226,9 @@ class Customer(Model):
     address = submodel(Address, "address")
     phone = submodel(Phone, "phone")
     fax = submodel(Phone, "fax")
+
+    def __str__(self):
+        return str(self.handle)
 
 
 class SSLProduct(Model):
