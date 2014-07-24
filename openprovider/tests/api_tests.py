@@ -10,7 +10,12 @@ class ApiTestCase(unittest.TestCase):
     api = None
 
     def setUp(self):
+        self.api = ApiTestCase.api_factory()
+
+    @staticmethod
+    def api_factory():
         username = 'antagonistbv-test'
         password = 'antagonistbv'
         url = "https://api.cte.openprovider.eu"
-        self.api = openprovider.OpenProvider(username, password, url=url)
+        return openprovider.OpenProvider(username, password, url=url)
+

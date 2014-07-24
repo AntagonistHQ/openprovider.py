@@ -22,6 +22,7 @@ class OpenProvider(object):
         """Initializes the connection with the given username and password."""
         self.username = username
         self.password = password
+        self.url = url
 
         # Initialize and add all modules.
         self.customers = customer.CustomerModule().with_parent(self)
