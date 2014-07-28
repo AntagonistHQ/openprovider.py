@@ -25,14 +25,14 @@ class OpenProvider(object):
         self.url = url
 
         # Initialize and add all modules.
-        self.customers = customer.CustomerModule().with_parent(self)
-        self.domains = domain.DomainModule().with_parent(self)
-        self.extensions = extension.ExtensionModule().with_parent(self)
-        self.nameserver = nameserver.NameserverModule().with_parent(self)
-        self.nsgroup = nsgroup.NSGroupModule().with_parent(self)
-        self.ssl = ssl.SSLModule().with_parent(self)
-        self.reseller = reseller.ResellerModule().with_parent(self)
-        self.financial = financial.FinancialModule().with_parent(self)
+        self.customers = customer.CustomerModule(self)
+        self.domains = domain.DomainModule(self)
+        self.extensions = extension.ExtensionModule(self)
+        self.nameserver = nameserver.NameserverModule(self)
+        self.nsgroup = nsgroup.NSGroupModule(self)
+        self.ssl = ssl.SSLModule(self)
+        self.reseller = reseller.ResellerModule(self)
+        self.financial = financial.FinancialModule(self)
 
         # Set up Requests session
         self.http = anyhttp.HttpClient.any(url)
