@@ -1,6 +1,16 @@
 # coding=utf-8
 
-from openprovider.modules import E, common
+from openprovider.modules import E, OE, common
+from openprovider.models import Model
+
+
+def _domain(domain):
+    sld, tld = domain.split('.', 1)
+
+    return E.domain(
+        E.name(sld),
+        E.extension(tld),
+    )
 
 
 class DomainModule(common.Module):
@@ -35,3 +45,67 @@ class DomainModule(common.Module):
                 )
             )
         )
+
+    def create_domain_request(self, domain, period, owner_handle, admin_handle, tech_handle,
+            billing_handle=None, reseller_handle=None, ns_group=None, ns_template_name=None,
+            name_servers=None, use_domicile=False, promo_code=None, autorenew=None, comments=None,
+            dnssec_keys=None, application_mode=None):
+
+        nameservers = E.nameServers(E.array(*[E.item(E.name(ns.name), OE('ip', ns.ip),
+            OE('ip6', ns.ip6)) for ns in name_servers])) if name_servers else None
+
+        request = E.createDomainRequest(
+                _domain(domain),
+                E.period(period),
+                E.ownerHandle(owner_handle),
+                E.adminHandle(admin_handle),
+                E.techHandle(tech_handle),
+                OE('billingHandle', billing_handle),
+                OE('resellerHandle', reseller_handle),
+                OE('nsGroup', ns_group),
+                OE('nsTemplateName', ns_template_name),
+                nameservers,
+                OE('useDomicile', use_domicile, int),
+                OE('promoCode', promo_code),
+                OE('autorenew', autorenew),
+                OE('comments', comments),
+                OE('dnssecKeys', dnssec_keys),
+                OE('applicationMode', application_mode),
+        )
+        response = self.request(request)
+        return response.as_model(Model)
+
+    def delete_domain_request(self, domain, request_type='delete'):
+        self.request(E.deleteDomainRequest(_domain(domain), E('type', request_type)))
+
+    def modify_domain_request(self, domain, owner_handle=None, admin_handle=None, tech_handle=None,
+            billing_handle=None, reseller_handle=None, ns_group=None, ns_template_name=None,
+            name_servers=None, use_domicile=False, promo_code=None, autorenew=None, comments=None,
+            dnssec_keys=None, application_mode=None):
+
+        nameservers = E.nameServers(E.array(*[E.item(E.name(ns.name), OE('ip', ns.ip),
+            OE('ip6', ns.ip6)) for ns in name_servers])) if name_servers else None
+
+        request = E.modifyDomainRequest(
+                _domain(domain),
+                OE('ownerHandle', owner_handle),
+                OE('adminHandle', admin_handle),
+                OE('techHandle', tech_handle),
+                OE('billingHandle', billing_handle),
+                OE('resellerHandle', reseller_handle),
+                OE('nsGroup', ns_group),
+                OE('nsTemplateName', ns_template_name),
+                nameservers,
+                OE('useDomicile', use_domicile, int),
+                OE('promoCode', promo_code),
+                OE('autorenew', autorenew),
+                OE('comments', comments),
+                OE('dnssecKeys', dnssec_keys),
+                OE('applicationMode', application_mode),
+        )
+        self.request(request)
+
+    def retrieve_domain_request(self, domain, additional_data=False, registry_details=False):
+        request = E.retrieveDomainRequest(_domain(domain))
+        response = self.request(request)
+        return response.as_model(Model)
