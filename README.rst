@@ -2,6 +2,6 @@
 openprovider.py
 ===============
 
-This is an unofficial Python library for the OpenProvider API. Use it to buy
+This is an unofficial Python library for the Openprovider API. Use it to buy
 domains, order SSL certificates and more from
-`OpenProvider <http://openprovider.com>`_.
+`Openprovider <http://openprovider.com>`_.
