@@ -1,6 +1,6 @@
 # coding=utf-8
 
-from openprovider.modules import common
+from openprovider.modules import E, common
 from openprovider.models import Reseller
 
 
@@ -11,5 +11,5 @@ class ResellerModule(common.Module):
         """
         Retrieve contact information on ourselves.
         """
-        response = self.request(self.e.retrieveResellerRequest())
+        response = self.request(E.retrieveResellerRequest())
         return Reseller(response.data)

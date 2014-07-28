@@ -1,5 +1,9 @@
 # coding=utf-8
 
+import lxml
+
+E = lxml.objectify.ElementMaker(annotate=False)
+
 from openprovider.modules import customer
 from openprovider.modules import domain
 from openprovider.modules import extension

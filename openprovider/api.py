@@ -10,7 +10,7 @@ import lxml.etree
 
 from openprovider import response
 from openprovider import anyhttp
-from openprovider.modules import customer, domain, extension, financial, \
+from openprovider.modules import E, customer, domain, extension, financial, \
     nameserver, nsgroup, reseller, ssl
 from openprovider.data.exception_map import from_code
 
@@ -43,13 +43,11 @@ class OpenProvider(object):
         it to the OpenProvider API.
         """
 
-        e = lxml.objectify.ElementMaker(annotate=False)
-
         apirequest = lxml.etree.tostring(
-            e.openXML(
-                e.credentials(
-                    e.username(self.username),
-                    e.password(self.password),
+            E.openXML(
+                E.credentials(
+                    E.username(self.username),
+                    E.password(self.password),
                 ),
                 tree
             ),
