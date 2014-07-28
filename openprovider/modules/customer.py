@@ -1,19 +1,19 @@
 # coding=utf-8
 
-from openprovider.modules import common
+from openprovider.modules import E, common
 from openprovider.models import Customer
 from openprovider.util import parse_phone_number
 
 
-def _get_phone_xml(e, parent, number):
+def _get_phone_xml(parent, number):
     if not number:
         return ''
 
     country, area, subscriber = parse_phone_number(number)
-    return parent(
-            e.countryCode(country),
-            e.areaCode(area),
-            e.subscriberNumber(subscriber),
+    return E(parent,
+            E.countryCode(country),
+            E.areaCode(area),
+            E.subscriberNumber(subscriber),
     )
 
 
@@ -24,31 +24,29 @@ class CustomerModule(common.Module):
                         company_name=None, additional_data={}):
         """Create a customer"""
 
-        e = self.e
-
-        response = self.request(e.createCustomerRequest(
-            e.companyName(company_name),
-            e.vat(vat),
-            e.name(
-                e.initials(name.initials),
-                e.firstName(name.first_name),
-                e.prefix(name.prefix or ''),
-                e.lastName(name.last_name),
+        response = self.request(E.createCustomerRequest(
+            E.companyName(company_name),
+            E.vat(vat),
+            E.name(
+                E.initials(name.initials),
+                E.firstName(name.first_name),
+                E.prefix(name.prefix or ''),
+                E.lastName(name.last_name),
             ),
-            e.gender(gender),
-            _get_phone_xml(e, e.phone, phone),
-            _get_phone_xml(e, e.fax, fax),
-            e.address(
-                e.street(address.street),
-                e.number(address.number),
-                e.suffix(address.suffix or ''),
-                e.zipcode(address.zipcode),
-                e.city(address.city),
-                e.state(address.state or ''),
-                e.country(address.country),
+            E.gender(gender),
+            _get_phone_xml('phone', phone),
+            _get_phone_xml('fax', fax),
+            E.address(
+                E.street(address.street),
+                E.number(address.number),
+                E.suffix(address.suffix or ''),
+                E.zipcode(address.zipcode),
+                E.city(address.city),
+                E.state(address.state or ''),
+                E.country(address.country),
             ),
-            e.email(email),
-            e.additionalData(*[e(key, value) for key, value in additional_data.items()]),
+            E.email(email),
+            E.additionalData(*[E(key, value) for key, value in additional_data.items()]),
         ))
 
         return str(response.data.handle)
@@ -56,9 +54,7 @@ class CustomerModule(common.Module):
     def delete_customer(self, handle):
         """Delete a customer."""
 
-        e = self.e
-
-        self.request(e.deleteCustomerRequest(e.handle(handle)))
+        self.request(E.deleteCustomerRequest(E.handle(handle)))
 
         return True
 
@@ -66,24 +62,22 @@ class CustomerModule(common.Module):
                         company_name=None, additional_data={}):
         """Modify a customer."""
 
-        e = self.e
-
-        self.request(e.modifyCustomerRequest(
-            e.handle(handle),
-            e.vat(vat or ''),
-            _get_phone_xml(e, e.phone, phone),
-            _get_phone_xml(e, e.fax, fax),
-            e.address(
-                e.street(address.street),
-                e.number(address.number),
-                e.suffix(address.suffix or ''),
-                e.zipcode(address.zipcode),
-                e.city(address.city),
-                e.state(address.state or ''),
-                e.country(address.country),
+        self.request(E.modifyCustomerRequest(
+            E.handle(handle),
+            E.vat(vat or ''),
+            _get_phone_xml('phone', phone),
+            _get_phone_xml('fax', fax),
+            E.address(
+                E.street(address.street),
+                E.number(address.number),
+                E.suffix(address.suffix or ''),
+                E.zipcode(address.zipcode),
+                E.city(address.city),
+                E.state(address.state or ''),
+                E.country(address.country),
             ),
-            e.email(email or ''),
-            e.additionalData(*[e(key, value) for key, value in additional_data.items()]),
+            E.email(email or ''),
+            E.additionalData(*[E(key, value) for key, value in additional_data.items()]),
         ))
 
         return True
@@ -92,15 +86,13 @@ class CustomerModule(common.Module):
             company_name_pattern=None, with_additional_data=False):
         """Search the list of customers."""
 
-        e = self.e
-
-        response = self.request(e.searchCustomerRequest(
-            e.limit(limit),
-            e.offset(offset),
-            e.emailPattern(email_pattern or ''),
-            e.lastNamePattern(last_name_pattern or ''),
-            e.companyNamePattern(company_name_pattern or ''),
-            e.withAdditionalData(int(with_additional_data)),
+        response = self.request(E.searchCustomerRequest(
+            E.limit(limit),
+            E.offset(offset),
+            E.emailPattern(email_pattern or ''),
+            E.lastNamePattern(last_name_pattern or ''),
+            E.companyNamePattern(company_name_pattern or ''),
+            E.withAdditionalData(int(with_additional_data)),
         ))
 
         return response.as_models(Customer)
@@ -108,11 +100,9 @@ class CustomerModule(common.Module):
     def retrieve_customer(self, handle, with_additional_data=False):
         """Retrieve information of an existing customer."""
 
-        e = self.e
-
-        response = self.request(e.retrieveCustomerRequest(
-            e.handle(handle),
-            e.withAdditionalData(int(with_additional_data)),
+        response = self.request(E.retrieveCustomerRequest(
+            E.handle(handle),
+            E.withAdditionalData(int(with_additional_data)),
         ))
 
         return response.as_model(Customer)

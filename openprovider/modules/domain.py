@@ -1,6 +1,6 @@
 # coding=utf-8
 
-from openprovider.modules import common
+from openprovider.modules import E, common
 
 
 class DomainModule(common.Module):
@@ -25,13 +25,12 @@ class DomainModule(common.Module):
         return dict((i.domain, i.status) for i in items)
 
     def _check_cmd(self, domains):
-        e = self.e
-        return e.checkDomainRequest(
-            e.domains(
-                e.array(
-                    *[e.item(
-                        e.name(domain.split(".")[0]),
-                        e.extension(domain.split(".")[1])
+        return E.checkDomainRequest(
+            E.domains(
+                E.array(
+                    *[E.item(
+                        E.name(domain.split(".")[0]),
+                        E.extension(domain.split(".")[1])
                     ) for domain in domains]
                 )
             )

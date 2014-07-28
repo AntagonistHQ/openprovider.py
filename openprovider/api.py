@@ -10,7 +10,7 @@ import lxml.etree
 
 from openprovider import response
 from openprovider import anyhttp
-from openprovider.modules import customer, domain, extension, financial, \
+from openprovider.modules import E, customer, domain, extension, financial, \
     nameserver, nsgroup, reseller, ssl
 from openprovider.data.exception_map import from_code
 
@@ -25,14 +25,14 @@ class OpenProvider(object):
         self.url = url
 
         # Initialize and add all modules.
-        self.customers = customer.CustomerModule().with_parent(self)
-        self.domains = domain.DomainModule().with_parent(self)
-        self.extensions = extension.ExtensionModule().with_parent(self)
-        self.nameserver = nameserver.NameserverModule().with_parent(self)
-        self.nsgroup = nsgroup.NSGroupModule().with_parent(self)
-        self.ssl = ssl.SSLModule().with_parent(self)
-        self.reseller = reseller.ResellerModule().with_parent(self)
-        self.financial = financial.FinancialModule().with_parent(self)
+        self.customers = customer.CustomerModule(self)
+        self.domains = domain.DomainModule(self)
+        self.extensions = extension.ExtensionModule(self)
+        self.nameserver = nameserver.NameserverModule(self)
+        self.nsgroup = nsgroup.NSGroupModule(self)
+        self.ssl = ssl.SSLModule(self)
+        self.reseller = reseller.ResellerModule(self)
+        self.financial = financial.FinancialModule(self)
 
         # Set up Requests session
         self.http = anyhttp.HttpClient.any(url)
@@ -43,13 +43,11 @@ class OpenProvider(object):
         it to the OpenProvider API.
         """
 
-        e = lxml.objectify.ElementMaker(annotate=False)
-
         apirequest = lxml.etree.tostring(
-            e.openXML(
-                e.credentials(
-                    e.username(self.username),
-                    e.password(self.password),
+            E.openXML(
+                E.credentials(
+                    E.username(self.username),
+                    E.password(self.password),
                 ),
                 tree
             ),
