@@ -18,13 +18,6 @@ class HttpClient(object):
         """Post some data to the Openprovider API."""
         raise NotImplementedError()
 
-    @staticmethod
-    def any(*args, **kwargs):
-        try:
-            return RequestsHttpClient(*args, **kwargs)
-        except ImportError:
-            return UrllibHttpClient(*args, **kwargs)
-
 
 class RequestsHttpClient(HttpClient):
     """
@@ -34,8 +27,6 @@ class RequestsHttpClient(HttpClient):
 
     def __init__(self, url):
         super(RequestsHttpClient, self).__init__(url)
-
-        import requests
 
         self.session = requests.Session()
         self.session.verify = True
@@ -64,3 +55,13 @@ class UrllibHttpClient(HttpClient):
         req = self.urllib.Request(self.url, data, self.headers)
         response = self.urllib.urlopen(req)
         return response.read()
+
+
+try:
+    import requests
+except ImportError:
+    AnyHttpClient = UrllibHttpClient
+else:
+    AnyHttpClient = RequestsHttpClient
+
+__all__ = ('AnyHttpClient',)

@@ -9,7 +9,7 @@ import lxml.objectify
 import lxml.etree
 
 from openprovider import response
-from openprovider import anyhttp
+from openprovider.anyhttp import AnyHttpClient
 from openprovider.modules import E, customer, domain, extension, financial, \
     nameserver, nsgroup, reseller, ssl
 from openprovider.data.exception_map import from_code
@@ -34,8 +34,8 @@ class OpenProvider(object):
         self.reseller = reseller.ResellerModule(self)
         self.financial = financial.FinancialModule(self)
 
-        # Set up Requests session
-        self.http = anyhttp.HttpClient.any(url)
+        # Set up API client
+        self.http = AnyHttpClient(url)
 
     def request(self, tree, **kwargs):
         """
