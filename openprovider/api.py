@@ -9,10 +9,24 @@ import lxml.objectify
 import lxml.etree
 
 from openprovider.anyhttp import AnyHttpClient
-from openprovider.modules import E, customer, domain, extension, financial, \
-    nameserver, nsgroup, reseller, ssl
 from openprovider.data.exception_map import from_code
+from openprovider.modules import E, MODULE_MAPPING
 from openprovider.response import Response
+
+
+def _get_module_name(module):
+    """
+    Return the module name.
+
+    >>> from openprovider.modules import CustomerModule
+    >>> _get_module_name(CustomerModule)
+    'customer'
+
+    >>> _get_module_name(OpenProvider)
+    'openprovider'
+    """
+    name = module.__name__[:-6] if module.__name__.endswith('Module') else module.__name__
+    return name.lower()
 
 
 class OpenProvider(object):
@@ -25,14 +39,12 @@ class OpenProvider(object):
         self.url = url
 
         # Initialize and add all modules.
-        self.customers = customer.CustomerModule(self)
-        self.domains = domain.DomainModule(self)
-        self.extensions = extension.ExtensionModule(self)
-        self.nameserver = nameserver.NameserverModule(self)
-        self.nsgroup = nsgroup.NSGroupModule(self)
-        self.ssl = ssl.SSLModule(self)
-        self.reseller = reseller.ResellerModule(self)
-        self.financial = financial.FinancialModule(self)
+        for old_name, module in MODULE_MAPPING.items():
+            name = _get_module_name(module)
+            instance = module(self)
+            setattr(self, name, instance)
+            if old_name != name:
+                setattr(self, old_name, instance)
 
         # Set up API client
         self.http = AnyHttpClient(url)

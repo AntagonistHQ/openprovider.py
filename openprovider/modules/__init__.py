@@ -24,11 +24,23 @@ def OE(element, value, transform=lambda x: x):
     return E(element, transform(value)) if value is not None else None
 
 
-from openprovider.modules import customer
-from openprovider.modules import domain
-from openprovider.modules import extension
-from openprovider.modules import financial
-from openprovider.modules import nameserver
-from openprovider.modules import nsgroup
-from openprovider.modules import reseller
-from openprovider.modules import ssl
+from openprovider.modules.customer import CustomerModule
+from openprovider.modules.domain import DomainModule
+from openprovider.modules.extension import ExtensionModule
+from openprovider.modules.financial import FinancialModule
+from openprovider.modules.nameserver import NameserverModule
+from openprovider.modules.nsgroup import NSGroupModule
+from openprovider.modules.reseller import ResellerModule
+from openprovider.modules.ssl import SSLModule
+
+
+MODULE_MAPPING = {
+        'customers': CustomerModule,
+        'domains': DomainModule,
+        'extensions': ExtensionModule,
+        'nameserver': NameserverModule,
+        'nsgroup': NSGroupModule,
+        'ssl': SSLModule,
+        'reseller': ResellerModule,
+        'financial': FinancialModule,
+}
