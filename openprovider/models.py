@@ -143,7 +143,9 @@ class Nameserver(Model):
     ip6 (required if no valid ip)
         IPv6 address of the nameserver
     """
-    pass
+
+    def __str__(self):
+        return str(self.name)
 
 
 class Record(Model):
