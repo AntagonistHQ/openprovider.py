@@ -4,6 +4,16 @@ from openprovider.modules import E, OE, common
 from openprovider.models import Model
 
 
+def _nameservers(nameservers):
+    items = [E.item(E.name(ns.name), OE('ip', ns.ip), OE('ip6', ns.ip6)) for ns in nameservers]
+    return E.array(*items)
+
+
+def _dnssec_keys(keys):
+    items = [E.item(E.flags(key.flags), E.alg(key.alg), E.pubKey(key.pubkey)) for key in keys]
+    return E.array(*items)
+
+
 def _domain(domain):
     sld, tld = domain.split('.', 1)
 
@@ -51,9 +61,6 @@ class DomainModule(common.Module):
             name_servers=None, use_domicile=False, promo_code=None, autorenew=None, comments=None,
             dnssec_keys=None, application_mode=None):
 
-        nameservers = E.nameServers(E.array(*[E.item(E.name(ns.name), OE('ip', ns.ip),
-            OE('ip6', ns.ip6)) for ns in name_servers])) if name_servers else None
-
         request = E.createDomainRequest(
                 _domain(domain),
                 E.period(period),
@@ -64,12 +71,12 @@ class DomainModule(common.Module):
                 OE('resellerHandle', reseller_handle),
                 OE('nsGroup', ns_group),
                 OE('nsTemplateName', ns_template_name),
-                nameservers,
-                OE('useDomicile', use_domicile, int),
+                OE('nameServers', name_servers, transform=_nameservers),
+                OE('useDomicile', use_domicile, transform=int),
                 OE('promoCode', promo_code),
                 OE('autorenew', autorenew),
                 OE('comments', comments),
-                OE('dnssecKeys', dnssec_keys),
+                OE('dnssecKeys', dnssec_keys, transform=_dnssec_keys),
                 OE('applicationMode', application_mode),
         )
         response = self.request(request)
@@ -83,9 +90,6 @@ class DomainModule(common.Module):
             name_servers=None, use_domicile=False, promo_code=None, autorenew=None, comments=None,
             dnssec_keys=None, application_mode=None):
 
-        nameservers = E.nameServers(E.array(*[E.item(E.name(ns.name), OE('ip', ns.ip),
-            OE('ip6', ns.ip6)) for ns in name_servers])) if name_servers else None
-
         request = E.modifyDomainRequest(
                 _domain(domain),
                 OE('ownerHandle', owner_handle),
@@ -95,12 +99,12 @@ class DomainModule(common.Module):
                 OE('resellerHandle', reseller_handle),
                 OE('nsGroup', ns_group),
                 OE('nsTemplateName', ns_template_name),
-                nameservers,
-                OE('useDomicile', use_domicile, int),
+                OE('nameServers', name_servers, transform=_nameservers),
+                OE('useDomicile', use_domicile, transform=int),
                 OE('promoCode', promo_code),
                 OE('autorenew', autorenew),
                 OE('comments', comments),
-                OE('dnssecKeys', dnssec_keys),
+                OE('dnssecKeys', dnssec_keys, transform=_dnssec_keys),
                 OE('applicationMode', application_mode),
         )
         self.request(request)
