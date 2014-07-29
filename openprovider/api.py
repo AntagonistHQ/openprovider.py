@@ -8,11 +8,11 @@ import lxml
 import lxml.objectify
 import lxml.etree
 
-from openprovider import response
 from openprovider.anyhttp import AnyHttpClient
 from openprovider.modules import E, customer, domain, extension, financial, \
     nameserver, nsgroup, reseller, ssl
 from openprovider.data.exception_map import from_code
+from openprovider.response import Response
 
 
 class OpenProvider(object):
@@ -59,7 +59,7 @@ class OpenProvider(object):
         tree = lxml.objectify.fromstring(apiresponse)
 
         if tree.reply.code == 0:
-            return response.Response(tree)
+            return Response(tree)
         else:
             klass = from_code(tree.reply.code)
             desc = tree.reply.desc
