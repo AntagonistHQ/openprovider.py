@@ -7,6 +7,7 @@ Entry point for the OpenProvider API.
 import lxml
 import lxml.objectify
 import lxml.etree
+import os
 
 from openprovider.anyhttp import AnyHttpClient
 from openprovider.data.exception_map import from_code
@@ -78,3 +79,22 @@ class OpenProvider(object):
             code = tree.reply.code
             data = tree.reply.data
             raise klass("{0} ({1}) {2}".format(desc, code, data))
+
+
+def _get_env(key, account):
+    env_key = account.upper() + '_' if account else ''
+    try:
+        return os.environ['OPENPROVIDER_' + env_key + key.upper()]
+    except KeyError:
+        msg = 'Missing openprovider ' + key
+        if account:
+            msg += ' for account ' + account
+        raise KeyError(msg)
+
+
+def api_factory(account=''):
+    username = _get_env('username', account)
+    password = _get_env('password', account)
+    url = os.environ.get('OPENPROVIDER_URL', 'https://api.openprovider.eu')
+
+    return OpenProvider(username, password, url)

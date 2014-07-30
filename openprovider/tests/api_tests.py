@@ -1,7 +1,7 @@
 # coding=utf-8
 
 import unittest
-import openprovider
+from openprovider.api import api_factory
 
 
 class ApiTestCase(unittest.TestCase):
@@ -10,12 +10,4 @@ class ApiTestCase(unittest.TestCase):
     api = None
 
     def setUp(self):
-        self.api = ApiTestCase.api_factory()
-
-    @staticmethod
-    def api_factory():
-        username = 'antagonistbv-test'
-        password = 'antagonistbv'
-        url = "https://api.cte.openprovider.eu"
-        return openprovider.OpenProvider(username, password, url=url)
-
+        self.api = api_factory('test')
