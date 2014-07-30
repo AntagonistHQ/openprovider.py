@@ -19,7 +19,8 @@ setup(
         "requests >= 2.3.0",
         "lxml >= 3.3.5",
     ],
-    setup_requires=[
+    test_suite='nose.collector',
+    tests_require=[
         'nose>=1.0',
         'coverage>=3.7'
     ]
