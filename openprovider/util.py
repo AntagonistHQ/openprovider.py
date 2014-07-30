@@ -1,7 +1,10 @@
 # coding=utf-8
 
 from __future__ import print_function
-from string import maketrans
+try:
+    from string import maketrans
+except ImportError:  # Python 3
+    maketrans = str.maketrans
 import re
 
 
