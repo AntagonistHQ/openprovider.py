@@ -15,7 +15,9 @@ class DomainTestCase(ApiTestCase):
         try:
             secundary_api = api_factory('test_secundary')
         except KeyError:
-            self.skip("No secundary test account configured")
+            if not hasattr(self, 'skipTest'):  # python 2.6
+                return
+            self.skipTest("No secundary account configured")
 
         domain = 'ci-%d.com' % calendar.timegm(dt.now().timetuple())
         primary_handle = 'YN000088-NL'
