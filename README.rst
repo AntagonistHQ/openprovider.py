@@ -24,3 +24,13 @@ Now you can run the tests:
 .. code:: shell
 
     python setup.py nosetests
+
+Building the docs
+-----------------
+
+Be sure to install sphinx. If you are in a virtualenv, it may be needed to
+install sphinx in the virtualenv as well since it tries to import.
+
+.. code:: shell
+
+    make -C docs html
