@@ -18,3 +18,9 @@ The testing environment uses environment variables to run. For example:
     export OPENPROVIDER_URL="https://api.cte.openprovider.eu"
 
 When using virtualenvwrapper, you can place this in $VIRTUAL_ENV/bin/postactivate.
+
+Now you can run the tests:
+
+.. code:: shell
+
+    python setup.py nosetests
