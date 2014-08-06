@@ -29,6 +29,10 @@ class BadStateException(RuleViolation):
     """An element is in a state that does not allow your request."""
 
 
+class InvalidAuthorizationCode(RuleViolation):
+    """The authorization code is missing, empty or incorrect."""
+
+
 class AuthenticationError(BadRequest):
     """Something went wrong while authenticating the request."""
 
