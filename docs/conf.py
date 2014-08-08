@@ -23,3 +23,15 @@ pygments_style = 'sphinx'
 html_theme = 'default'
 
 htmlhelp_basename = 'openproviderpydoc'
+
+latex_elements = {
+    'papersize': 'a4paper',
+    'classoptions': ',openany,oneside',
+    'babel': '\\usepackage[english]{babel}',
+    'preamble': '\usepackage{microtype}',
+}
+
+latex_documents = [
+    ('index', 'openproviderpy.tex', u'openprovider.py Documentation',
+    u'Antagonist B.V.', 'manual'),
+]
