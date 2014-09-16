@@ -8,9 +8,10 @@ import lxml
 import lxml.objectify
 import lxml.etree
 import os
+import requests
 
-from openprovider.anyhttp import AnyHttpClient
 from openprovider.data.exception_map import from_code
+from openprovider.exceptions import ServiceUnavailable
 from openprovider.modules import E, MODULE_MAPPING
 from openprovider.response import Response
 
@@ -39,6 +40,11 @@ class OpenProvider(object):
         self.password = password
         self.url = url
 
+        # Set up the API client
+        self.session = requests.Session()
+        self.session.verify = True
+        self.session.headers['User-Agent'] = 'openprovider.py/0.1'  # TODO: get version
+
         # Initialize and add all modules.
         for old_name, module in MODULE_MAPPING.items():
             name = _get_module_name(module)
@@ -46,9 +52,6 @@ class OpenProvider(object):
             setattr(self, name, instance)
             if old_name != name:
                 setattr(self, old_name, instance)
-
-        # Set up API client
-        self.http = AnyHttpClient(url)
 
     def request(self, tree, **kwargs):
         """
@@ -68,8 +71,13 @@ class OpenProvider(object):
             method='c14n'
         )
 
-        apiresponse = self.http.post(apirequest)
-        tree = lxml.objectify.fromstring(apiresponse)
+        apiresponse = self.session.post(self.url, data=apirequest)
+
+        # OpenProvider doesn't use codes, so this only catches 5xx errors
+        if apiresponse.status_code != requests.codes.ok:
+            raise ServiceUnavailable()
+
+        tree = lxml.objectify.fromstring(apiresponse.content)
 
         if tree.reply.code == 0:
             return Response(tree)
