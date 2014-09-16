@@ -43,7 +43,7 @@ class OpenProvider(object):
         # Set up the API client
         self.session = requests.Session()
         self.session.verify = True
-        self.session.headers['User-Agent'] = 'openprovider.py/0.1'  # TODO: get version
+        self.session.headers['User-Agent'] = 'openprovider.py/0.2.0'
 
         # Initialize and add all modules.
         for old_name, module in MODULE_MAPPING.items():
