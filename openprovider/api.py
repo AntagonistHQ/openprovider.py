@@ -11,6 +11,7 @@ import os
 import requests
 
 from openprovider.data.exception_map import from_code
+from openprovider.exceptions import ServiceUnavailable
 from openprovider.modules import E, MODULE_MAPPING
 from openprovider.response import Response
 
@@ -71,6 +72,11 @@ class OpenProvider(object):
         )
 
         apiresponse = self.session.post(self.url, data=apirequest)
+
+        # OpenProvider doesn't use codes, so this only catches 5xx errors
+        if apiresponse.status_code != requests.codes.ok:
+            raise ServiceUnavailable()
+
         tree = lxml.objectify.fromstring(apiresponse.content)
 
         if tree.reply.code == 0:
