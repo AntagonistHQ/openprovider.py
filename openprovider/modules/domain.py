@@ -112,7 +112,7 @@ class DomainModule(common.Module):
     def retrieve_domain_request(self, domain, additional_data=False, registry_details=False):
         request = E.retrieveDomainRequest(_domain(domain))
         response = self.request(request)
-        return response.as_model(Model)
+        return response.as_model(DomainDetails)
 
     def transfer_domain_request(self, domain, period, auth_code, owner_handle, admin_handle,
             tech_handle, billing_handle=None, reseller_handle=None, ns_group=None,
