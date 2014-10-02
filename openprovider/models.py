@@ -115,7 +115,7 @@ class Name(Model):
         if hasattr(self, "prefix"):
             return " ".join((self.first_name, self.prefix, self.last_name))
         else:
-            return " ".join((self.firs_name, self.last_name))
+            return " ".join((self.first_name, self.last_name))
 
 
 class Domain(Model):
