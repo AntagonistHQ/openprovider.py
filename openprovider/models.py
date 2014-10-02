@@ -129,7 +129,7 @@ class Domain(Model):
     """
 
     def __str__(self):
-        return ".".join((self.name, self.extension))
+        return "%s.%s" % (self.name, self.extension)
 
 
 class Nameserver(Model):
