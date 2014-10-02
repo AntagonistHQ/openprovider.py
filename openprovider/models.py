@@ -132,6 +132,18 @@ class Domain(Model):
         return "%s.%s" % (self.name, self.extension)
 
 
+class DomainDetails(Model):
+    """
+
+    A detailed domain.
+    """
+
+    domain = submodel(Domain, "domain")
+
+    def __str__(self):
+        return str(self.domain)
+
+
 class Nameserver(Model):
     """
     A nameserver with either an IPv4 or an IPv6 address.

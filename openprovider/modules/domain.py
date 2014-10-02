@@ -1,7 +1,7 @@
 # coding=utf-8
 
 from openprovider.modules import E, OE, common
-from openprovider.models import Model
+from openprovider.models import Model, DomainDetails
 
 
 def _nameservers(nameservers):
@@ -137,3 +137,20 @@ class DomainModule(common.Module):
         )
         response = self.request(request)
         return response.as_model(Model)
+
+    def search_domain_request(self, limit=None, offset=None, extension=None,
+            domain_name_pattern=None, contact_handle=None, ns_group_pattern=None, status=None,
+            with_addition_data=None):
+
+        request = E.searchDomainRequest(
+                OE('limit', limit),
+                OE('offset', offset),
+                OE('extension', extension),
+                OE('domainNamePattern', domain_name_pattern),
+                OE('contactHandle', contact_handle),
+                OE('nsGroupPattern', ns_group_pattern),
+                OE('status', status),
+                OE('withAdditionalData', with_addition_data),
+        )
+        response = self.request(request)
+        return response.as_models(DomainDetails)
