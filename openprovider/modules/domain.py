@@ -59,7 +59,7 @@ class DomainModule(common.Module):
     def create_domain_request(self, domain, period, owner_handle, admin_handle, tech_handle,
             billing_handle=None, reseller_handle=None, ns_group=None, ns_template_name=None,
             name_servers=None, use_domicile=False, promo_code=None, autorenew=None, comments=None,
-            dnssec_keys=None, application_mode=None):
+            dnssec_keys=None, application_mode=None, is_private_whois_enabled=None):
 
         request = E.createDomainRequest(
                 _domain(domain),
@@ -78,6 +78,7 @@ class DomainModule(common.Module):
                 OE('comments', comments),
                 OE('dnssecKeys', dnssec_keys, transform=_dnssec_keys),
                 OE('applicationMode', application_mode),
+                OE('isPrivateWhoisEnabled', is_private_whois_enabled),
         )
         response = self.request(request)
         return response.as_model(Model)
@@ -88,7 +89,7 @@ class DomainModule(common.Module):
     def modify_domain_request(self, domain, owner_handle=None, admin_handle=None, tech_handle=None,
             billing_handle=None, reseller_handle=None, ns_group=None, ns_template_name=None,
             name_servers=None, use_domicile=False, promo_code=None, autorenew=None, comments=None,
-            dnssec_keys=None, application_mode=None):
+            dnssec_keys=None, application_mode=None, is_private_whois_enabled):
 
         request = E.modifyDomainRequest(
                 _domain(domain),
@@ -106,6 +107,7 @@ class DomainModule(common.Module):
                 OE('comments', comments),
                 OE('dnssecKeys', dnssec_keys, transform=_dnssec_keys),
                 OE('applicationMode', application_mode),
+                OE('isPrivateWhoisEnabled', is_private_whois_enabled),
         )
         self.request(request)
 
