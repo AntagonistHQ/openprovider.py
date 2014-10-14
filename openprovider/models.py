@@ -20,7 +20,7 @@ class Model(object):
 
     def __dir__(self):
         attrs = set(self.__dict__.keys() + [camel_to_snake(key) for key in self._attrs.keys()])
-        if self._obj:
+        if self._obj is not None:
             attrs.update(camel_to_snake(t.tag) for t in self._obj.iterchildren())
         return [attr for attr in attrs if not attr.startswith('_')]
 
