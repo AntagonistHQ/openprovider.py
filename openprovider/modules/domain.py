@@ -31,8 +31,7 @@ class DomainModule(common.Module):
         Check availability for a single domain. Returns the domain's status as
         a string (either "active" or "free").
         """
-        response = self.request(self._check_cmd([domain]))
-        return response.data.array[0].item[0].status
+        return self.check_domain_request([domain])[0].status
 
     def check_many(self, domains):
         """
@@ -40,12 +39,16 @@ class DomainModule(common.Module):
         mapping the domain names to their statuses as a string
         ("active"/"free").
         """
-        response = self.request(self._check_cmd(domains))
-        items = response.data.array[0].item
-        return dict((i.domain, i.status) for i in items)
+        return dict((item.domain, item.status) for item in self.check_domain_request(domains))
 
-    def _check_cmd(self, domains):
-        return E.checkDomainRequest(
+    def check_domain_request(self, domains):
+        """
+        Return the availability of one or more domain names.
+
+        The availability is a model containing a domain and a status. It can also have a premium
+        attribute in case the domain has non-default costs.
+        """
+        request = E.checkDomainRequest(
             E.domains(
                 E.array(
                     *[E.item(
@@ -55,6 +58,9 @@ class DomainModule(common.Module):
                 )
             )
         )
+
+        response = self.request(request)
+        return [Model(item) for item in response.data.array.item]
 
     def create_domain_request(self, domain, period, owner_handle, admin_handle, tech_handle,
             billing_handle=None, reseller_handle=None, ns_group=None, ns_template_name=None,
