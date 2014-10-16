@@ -12,7 +12,7 @@ import requests
 
 from openprovider.data.exception_map import from_code
 from openprovider.exceptions import ServiceUnavailable
-from openprovider.modules import E, MODULE_MAPPING
+from openprovider.modules import E, OE, MODULE_MAPPING
 from openprovider.response import Response
 
 
@@ -34,10 +34,16 @@ def _get_module_name(module):
 class OpenProvider(object):
     """A connection to the OpenProvider API."""
 
-    def __init__(self, username, password, url="https://api.openprovider.eu"):
+    def __init__(self, username, password=None, url="https://api.openprovider.eu",
+            password_hash=None):
         """Initializes the connection with the given username and password."""
+
+        if bool(password) == bool(password_hash):
+            raise ValueError('Provide either a password or a password hash')
+
         self.username = username
         self.password = password
+        self.password_hash = password_hash
         self.url = url
 
         # Set up the API client
@@ -63,7 +69,8 @@ class OpenProvider(object):
             E.openXML(
                 E.credentials(
                     E.username(self.username),
-                    E.password(self.password),
+                    OE('password', self.password),
+                    OE('hash', self.password_hash),
                 ),
                 tree
             ),
@@ -102,7 +109,12 @@ def _get_env(key, account):
 
 def api_factory(account=''):
     username = _get_env('username', account)
-    password = _get_env('password', account)
+    try:
+        password_hash = _get_env('password_hash', account)
+        password = None
+    except KeyError:
+        password_hash = None
+        password = _get_env('password', account)
     url = os.environ.get('OPENPROVIDER_URL', 'https://api.openprovider.eu')
 
-    return OpenProvider(username, password, url)
+    return OpenProvider(username=username, password=password, password_hash=password_hash, url=url)
