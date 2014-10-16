@@ -42,7 +42,7 @@ class TestExtensions(tests.ApiTestCase):
     def test_search_extension(self):
         """Search should return something sensible."""
         r = self.api.extensions.search_extension(with_usage_count=True)
-        self.assertTrue(r[0].usage_count >= 0)
+        self.assertTrue(r[0].usage_count is not None)
 
     def test_retrieve_extension(self):
         """Retrieve should return a proper Extension."""
