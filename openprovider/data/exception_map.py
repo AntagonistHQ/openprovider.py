@@ -4,7 +4,7 @@
 Provides a mapping from OpenProvider API error codes to Python exceptions.
 """
 
-from openprovider.exceptions import *
+from openprovider.exceptions import *  # NOQA
 
 MAPPING = {
     0: OpenproviderError,           # No errors
@@ -164,7 +164,7 @@ MAPPING = {
     345: ValidationError,           # Bad provider specified
     346: UniqueViolation,           # Reseller cannot add duplicate domain
     347: ValidationError,           # Wrong auto renew value
-    358: InvalidAuthorizationCode   # Authorization code is invalid (undocumented code)
+    358: InvalidAuthorizationCode,  # Authorization code is invalid (undocumented code)
     360: RuleViolation,             # Nameservers in different subnets required
     361: RuleViolation,             # Owner or administrative contact not German
     362: RuleViolation,             # Domain is already registered with us
