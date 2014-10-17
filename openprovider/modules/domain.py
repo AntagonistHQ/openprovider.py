@@ -4,6 +4,14 @@ from openprovider.modules import E, OE, common
 from openprovider.models import Model, DomainDetails
 
 
+def _additional_data(data):
+    if not data:
+        return None
+
+    items = [E(key, value) for key, value in data.items()]
+    return E.additionalData(*items)
+
+
 def _nameservers(nameservers):
     items = [E.item(E.name(ns.name), OE('ip', ns.ip), OE('ip6', ns.ip6)) for ns in nameservers]
     return E.array(*items)
@@ -65,7 +73,8 @@ class DomainModule(common.Module):
     def create_domain_request(self, domain, period, owner_handle, admin_handle, tech_handle,
             billing_handle=None, reseller_handle=None, ns_group=None, ns_template_name=None,
             name_servers=None, use_domicile=False, promo_code=None, autorenew=None, comments=None,
-            dnssec_keys=None, application_mode=None, is_private_whois_enabled=None):
+            dnssec_keys=None, application_mode=None, is_private_whois_enabled=None,
+            additional_data=None):
 
         request = E.createDomainRequest(
                 _domain(domain),
@@ -85,6 +94,7 @@ class DomainModule(common.Module):
                 OE('dnssecKeys', dnssec_keys, transform=_dnssec_keys),
                 OE('applicationMode', application_mode),
                 OE('isPrivateWhoisEnabled', is_private_whois_enabled, transform=int),
+                _additional_data(additional_data),
         )
         response = self.request(request)
         return response.as_model(Model)
