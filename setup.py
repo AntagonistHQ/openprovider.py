@@ -7,7 +7,7 @@ except ImportError:
 
 setup(
     name='openprovider.py',
-    version='0.5.1',
+    version='0.6.0',
     author='Antagonist B.V.',
     author_email='info@antagonist.nl',
     packages=['openprovider', 'openprovider.modules', 'openprovider.tests', 'openprovider.data'],
