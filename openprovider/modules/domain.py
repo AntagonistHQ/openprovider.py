@@ -125,7 +125,8 @@ class DomainModule(common.Module):
                 OE('applicationMode', application_mode),
                 OE('isPrivateWhoisEnabled', is_private_whois_enabled, transform=int),
         )
-        self.request(request)
+        response = self.request(request)
+        return response.as_model(Model)
 
     def retrieve_domain_request(self, domain, additional_data=False, registry_details=False):
         request = E.retrieveDomainRequest(_domain(domain))
