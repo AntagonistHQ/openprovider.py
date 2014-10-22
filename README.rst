@@ -2,6 +2,13 @@
 openprovider.py
 ===============
 
+.. image:: https://travis-ci.org/AntagonistHQ/openprovider.py.svg?branch=master
+    :target: https://travis-ci.org/AntagonistHQ/openprovider.py
+    :alt: Build Status
+.. image:: https://readthedocs.org/projects/openproviderpy/badge/?version=latest
+    :target: https://readthedocs.org/projects/openproviderpy/?badge=latest
+    :alt: Documentation Status
+
 This is an unofficial Python library for the Openprovider API. Use it to buy
 domains, order SSL certificates and more from
 `Openprovider <http://openprovider.com>`_.
