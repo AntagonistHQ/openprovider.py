@@ -1,6 +1,3 @@
-import sys
-import os
-
 extensions = [
     'sphinx.ext.doctest',
     'sphinx.ext.coverage',
@@ -11,8 +8,8 @@ extensions = [
 master_doc = 'index'
 project = u'openprovider.py'
 copyright = u'2014, Antagonist B.V'
-version = '0.0.1'
-release = '0.0.1'
+version = '0.6.0'
+release = '0.6.0'
 
 html_static_path = ['_static']
 templates_path = ['_templates']
