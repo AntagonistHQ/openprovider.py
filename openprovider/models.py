@@ -112,10 +112,10 @@ class Name(Model):
     """
 
     def __str__(self):
-        if hasattr(self, "prefix"):
-            return " ".join((self.first_name, self.prefix, self.last_name))
+        if getattr(self, "prefix", None):
+            return "%s %s %s" % (self.first_name, self.prefix, self.last_name)
         else:
-            return " ".join((self.first_name, self.last_name))
+            return "%s %s" % (self.first_name, self.last_name)
 
 
 class Domain(Model):
