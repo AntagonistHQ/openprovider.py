@@ -92,7 +92,7 @@ class OpenProvider(object):
             klass = from_code(tree.reply.code)
             desc = tree.reply.desc
             code = tree.reply.code
-            data = tree.reply.data
+            data = getattr(tree.reply, 'data', '')
             raise klass("{0} ({1}) {2}".format(desc, code, data))
 
 
