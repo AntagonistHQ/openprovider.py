@@ -78,11 +78,11 @@ class OpenProvider(object):
             method='c14n'
         )
 
-        apiresponse = self.session.post(self.url, data=apirequest)
-
-        # OpenProvider doesn't use codes, so this only catches 5xx errors
-        if apiresponse.status_code != requests.codes.ok:
-            raise ServiceUnavailable()
+        try:
+            apiresponse = self.session.post(self.url, data=apirequest)
+            apiresponse.raise_for_status()
+        except requests.RequestException as e:
+            raise ServiceUnavailable(str(e))
 
         tree = lxml.objectify.fromstring(apiresponse.content)
 
