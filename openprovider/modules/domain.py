@@ -129,7 +129,11 @@ class DomainModule(common.Module):
         return response.as_model(Model)
 
     def retrieve_domain_request(self, domain, additional_data=False, registry_details=False):
-        request = E.retrieveDomainRequest(_domain(domain))
+        request = E.retrieveDomainRequest(
+                _domain(domain),
+                E.withAdditionalData(int(additional_data)),
+                E.withRegistryDetails(int(registry_details)),
+        )
         response = self.request(request)
         return response.as_model(DomainDetails)
 
