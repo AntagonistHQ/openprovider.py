@@ -11,7 +11,7 @@ setup(
     author='Antagonist B.V.',
     author_email='info@antagonist.nl',
     packages=['openprovider', 'openprovider.modules', 'openprovider.tests', 'openprovider.data'],
-    url='http://pypi.python.org/pypi/openprovider.py/',
+    url='https://github.com/AntagonistHQ/openprovider.py',
     license='LICENSE.rst',
     description='An unofficial library for the OpenProvider API',
     long_description=open('README.rst').read(),
