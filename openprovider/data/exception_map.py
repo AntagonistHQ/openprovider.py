@@ -102,6 +102,7 @@ MAPPING = {
     221: RuleViolation,             # 2 nameservers or a group required
     222: UniqueViolation,           # Invalid or double nameserver
     223: ValidationError,           # Empty nameservers/nameserver group name
+    224: ValidationError,           # Nameserver not found in the Openprovider system
     225: ValidationError,           # Empty nameserver name NS-1 field!
     226: ValidationError,           # Invalid nameserver hostname
     227: ValidationError,           # Invalid nameserver IPv4 address
@@ -111,6 +112,7 @@ MAPPING = {
     231: ValidationError,           # IP is not specified
     232: ValidationError,           # Empty nameserver IP-2 field!
     233: ValidationError,           # Invalid characters in nameserver IP-2 address
+    234: ValidationError,           # Can t resolve IP address from host
     235: ValidationError,           # Empty nameserver name NS-3 field!
     236: ValidationError,           # Invalid nameserver name NS-3 field!
     237: ValidationError,           # Empty nameserver IP-3 field!
@@ -140,6 +142,7 @@ MAPPING = {
     316: ValidationError,           # Invalid period!
     317: InvalidAuthorizationCode,  # Empty authorization code!
     318: InvalidAuthorizationCode,  # Authorization code is incorrect or missing.
+    319: ValidationError,           # Authorization code for this extension cannot be requested
     320: NoSuchElement,             # The domain is not in your account
     321: RuleViolation,             # Domains with extension cannot be traded
     322: RuleViolation,             # Domains with extension cannot be transferred
@@ -158,13 +161,24 @@ MAPPING = {
     335: ValidationError,           # Invalid tech handle!
     336: RuleViolation,             # The owner-data differs too too much
     337: RuleViolation,             # The entered owner does not equal the whois
+    338: ValidationError,           # Authorization code for this extension cannot be resetted
     339: InProgress,                # Not all external handles are created
     340: ServiceUnavailable,        # The registry is down for maintainance
     341: ServerError,               # ERROR saving domain data
     345: ValidationError,           # Bad provider specified
     346: UniqueViolation,           # Reseller cannot add duplicate domain
     347: ValidationError,           # Wrong auto renew value
+    348: ValidationError,           # Can not reset authorization code for domain using registrar domicile
+    349: ValidationError,           # Current method is not supported, connect to support please
+    351: ValidationError,           # Authorization code type parameter can not be an array
+    352: ValidationError,           # Authorization code validity has expired
+    353: ValidationError,           # Domain is not known by registry
+    354: ValidationError,           # There is no a transfer to approve or you are not permited to
+    355: ValidationError,           # Incorrect domain deletion type specified
+    356: ValidationError,           # Domain is not known by 3rd party registrar
+    357: ValidationError,           # Bad routeId on domain during transfer action
     358: InvalidAuthorizationCode,  # Authorization code is invalid (undocumented code)
+    359: ValidationError,           # Invalid domain type specified
     360: RuleViolation,             # Nameservers in different subnets required
     361: RuleViolation,             # Owner or administrative contact not German
     362: RuleViolation,             # Domain is already registered with us
@@ -173,6 +187,18 @@ MAPPING = {
     365: RuleViolation,             # This domain belongs to other reseller.
     366: BadStateException,         # This action is prohibitted for current status
     367: BadStateException,         # Domain cannot be locked because of its status
+    368: ValidationError,           # This domain cannot be deleted because renewal date is too close.
+    369: ValidationError,           # Transfer is prohibited by the current domain owner
+    370: ValidationError,           # Empty application mode!
+    371: ValidationError,           # application mode is out of the current date
+    372: ValidationError,           # Invalid default billing handle!
+    373: ValidationError,           # Invalid billing handle!
+    374: ValidationError,           # Domain `additionalData` parameter is missing
+    375: ValidationError,           # Domain `additionalData` parameter is invalid
+    376: ValidationError,           # Restore operation is not allowed for this domain
+    377: ValidationError,           # Wrong application mode
+    378: ValidationError,           # Domain preregistration is closed for this TLD
+    379: ValidationError,           # You are about to register the premium domain. If you accept this registration fee, re-send the createDomainRequest and add the parameters acceptPremiumFee with value 1 .
     380: ValidationError,           # Need first name to register an .it domain
     381: ValidationError,           # Need state to register an .it domain
     382: ValidationError,           # Need fiscal number to register an .it domain
@@ -188,6 +214,9 @@ MAPPING = {
     392: NoSuchElement,             # The form could not be found
     393: InProgress,                # The authorisation code was sent to the owner
     394: ServerError,               # The authorisation code could not be sent
+    395: ValidationError,           # Domain name is in Early Access Program state
+    396: ValidationError,           # The extension is locked, try again after the General Availability opens
+    397: ValidationError,           # Domain status transition is not allowed
     398: ValidationError,           # Invalid queue status set
     399: ServerError,               # An unknown domain error has occurred
     400: ValidationError,           # Empty name field!
@@ -218,6 +247,10 @@ MAPPING = {
     513: BadStateException,         # Domain is reserved
     514: BadStateException,         # The domain is already being transferred
     515: ValidationError,           # Invalid status for domain
+    516: ServerError,               # Unknown whois for extension
+    600: ServerError,               # DRS has sent wrong operation type
+    601: ServerError,               # DRS callback message has already been processed
+    602: ServerError,               # DRS callback notification was NOT sent to the customer
     800: NoSuchElement,             # Unknown DNS zone
     801: ValidationError,           # Invalid domain name
     802: ValidationError,           # Invalid extension
@@ -265,6 +298,15 @@ MAPPING = {
     872: NoSuchElement,             # Zone specified is not found.
     873: NoSuchElement,             # Template specified is not found.
     874: ValidationError,           # Template ID is empty.
+    875: RuleViolation,             # Not enough nameservers given
+    876: RuleViolation,             # It is not possible to use MX records that point to an IP address in the range 79.99.129.0/24.
+    890: RuleViolation,             # Incorrect DNSSEC record format.
+    891: RuleViolation,             # DNSSEC is not supported for this extension
+    892: RuleViolation,             # Protocol field of the dnskey record must be 3
+    893: RuleViolation,             # Algorithm field has wrong value
+    894: RuleViolation,             # Digest type field has wrong value
+    895: RuleViolation,             # DNSSEC keys and digests should be BASE64 encoded
+    896: RuleViolation,             # DNSSEC processing error
     900: AuthenticationError,       # Login failed
     901: AuthenticationError,       # Empty username field!
     902: AuthenticationError,       # Empty password field!
@@ -323,6 +365,8 @@ MAPPING = {
     1041: ValidationError,          # Selected invalid handle
     1045: ValidationError,          # Invalid e-mail address for approver
     1046: RuleViolation,            # E-mail address for approver is not allowed
+    1047: ServerError,              # Cannot retrieve valid emails for Intranet Server Name
+    1048: RuleViolation,            # Invalid signature algorithm
     1083: BadStateException,        # Certificate reissue from incomplete order
     1084: RuleViolation,            # Order does not belong to this reselleraccount
     1085: BadRequest,               # SSL plugin does not support this method
@@ -353,6 +397,11 @@ MAPPING = {
     1111: ValidationError,          # Tutorial ID is invalid
     1112: ValidationError,          # Tutorial Order ID is empty
     1113: ValidationError,          # Tutorial Order ID is invalid
+    1201: ValidationError,          # Bad CMN-object type
+    1202: ValidationError,          # CMN-object ID is invalid or empty
+    1203: ValidationError,          # CMN-object cannot be found
+    1204: ValidationError,          # Operation is not supported by the object
+    1800: ValidationError,          # TLD does not exist in Openprovider
     1901: ValidationError,          # Fiscal number [owner] is required
     1902: ValidationError,          # A VAT number of the owner is required
     1903: ValidationError,          # A company registration number is required
@@ -390,6 +439,13 @@ MAPPING = {
     3021: NoSuchElement,            # A license with such an ID does not exist.
     3022: ValidationError,          # Cannot create a license. Check Zipcode.
     3023: ValidationError,          # Cannot create a license. Check State.
+    3024: ValidationError,          # os is invalid
+    3025: ValidationError,          # version is invalid
+    3026: ValidationError,          # Operation is not supported for this license.
+    3027: ValidationError,          # Invalid virtualization specified
+    3028: ValidationError,          # Invalid type specified
+    3029: ValidationError,          # Invalid pack specified
+    3999: ValidationError,          # Unknown error.
     4001: BadRequest,               # Wrong command name.
     4002: AuthenticationError,      # Access denied.
     4003: AuthenticationError,      # Command's parameter(s) access violation.
@@ -403,6 +459,7 @@ MAPPING = {
     5005: RuleViolation,            # Contact cannot remove himself.
     5006: ValidationError,          # Bad password specified.
     5007: ValidationError,          # Passwords are not equal.
+    5008: ValidationError,          # Bad IP list value.
     6001: ValidationError,          # AdditionalData: Invalid birth city.
     6002: ValidationError,          # AdditionalData: Invalid birth address.
     6003: ValidationError,          # AdditionalData: Empty birth country.
@@ -421,6 +478,7 @@ MAPPING = {
     6016: ValidationError,          # AdditionalData: Invalid number.
     6017: ValidationError,          # AdditionalData: Invalid subscription date.
     6200: RuleViolation,            # Cannot delete a customer that has domain(s).
+    6206: ValidationError,          # Cannot delete a customer that assigned as default handle(s).
     7000: ValidationError,          # Question ID is empty
     7001: ValidationError,          # Question ID is invalid
     7002: ValidationError,          # Category ID is empty
@@ -428,6 +486,7 @@ MAPPING = {
     8000: ValidationError,          # Reseller ID is invalid
     8001: ValidationError,          # Reseller ID is empty
     8002: ServerError,              # Reseller cannot be created
+    8003: ValidationError,          # Reseller status is invalid
     9000: ValidationError,          # Contract ID is invalid
     9001: ValidationError,          # Contract ID is empty
     9002: ValidationError,          # IP Address is invalid
@@ -435,7 +494,61 @@ MAPPING = {
     10001: ValidationError,         # Invalid email specified.
     10002: ValidationError,         # Invalid username specified.
     10003: ValidationError,         # No email nor username are specified.
+    10004: ValidationError,         # Invalid password specified.
+    10005: ValidationError,         # Access denied.
+    11001: ValidationError,         # Reseller has no active subscription
+    11010: ValidationError,         # Your request contains an invalid domain
     11011: LimitReached,            # SE subscription limit is exceeded
+    11013: ValidationError,         # IP is invalid.
+    11014: LimitReached,            # Domain IP users limit is exceeded.
+    11015: ValidationError,         # This domain IP user does not exist
+    11016: ValidationError,         # This domain IP user exists already
+    11017: ValidationError,         # Cannot delete domain with bound IP users
+    11101: ValidationError,         # Invalid options specified
+    11102: ValidationError,         # You selected current options for upgrade
+    11999: ServerError,             # An unknown error has occurred.
+    13000: ValidationError,         # Incorrect PromoCode
+    14000: ValidationError,         # TmchMark ID is invalid
+    14001: ValidationError,         # Owner type is invalid
+    14002: ValidationError,         # Period is invalid
+    14003: ValidationError,         # Service type is invalid
+    14004: ValidationError,         # Notification frequency is invalid
+    14005: ValidationError,         # Gsc class is invalid
+    14006: ValidationError,         # Jurisdiction is invalid
+    14100: ValidationError,         # Document ID is invalid
+    14101: ValidationError,         # Document mime-type is invalid
+    14102: ValidationError,         # Document size is invalid
+    14200: ValidationError,         # Smd is not base64 format
+    14201: ValidationError,         # Smd is into revocation file
+    14202: ValidationError,         # Smd file is wrong
+    14299: ValidationError,         # Smd revocation file is inaccessible
+    14500: ServiceUnavailable,      # Error when connecting to TMCH
+    14999: ValidationError,         # An unknown error has occurred
+    15000: ValidationError,         # This type of reseller has not enough rights for this operation
+    16000: ValidationError,         # Extensions are required to create promocode
+    16001: ValidationError,         # Extensions are incorrect
+    16002: ValidationError,         # Reseller cannot use this flatfee
+    16003: ValidationError,         # Id of flatfee is incorrect
+    16004: ValidationError,         # Flatfee product type required
+    16005: ValidationError,         # Flatfee product type incorrect
+    16006: ValidationError,         # Autorenew option value incorrect
+    16007: ValidationError,         # Flatfee status incorrect
+    17000: ValidationError,         # DocuSign document ID is invalid
+    17001: ValidationError,         # You must sign a contract
+    17002: ValidationError,         # Was timed out, please try again
+    17003: ValidationError,         # Fax pending
+    17100: ServiceUnavailable,      # DocuSign server is unavailable, please try again in a few minutes
+    19000: ValidationError,         # Domain name is premium. Please contact support to purchase.
+    19001: ServerError,             # Can not create domain.
+    19002: ValidationError,         # Domain is premium, but price has not yet been published by registry
+    19003: ValidationError,         # Locking is not possible for domains with `Whois Privacy Protection` option enabled
+    19004: ValidationError,         # Transfer cannot be started. Requested domain is still in AGP (Addition grace period)
+    19005: ValidationError,         # Invalid fee amount for `Early Access Program` period
+    19006: ValidationError,         # Domain can not be anonymized as this TLD does not yet support whois privacy
+    19007: ValidationError,         # Domain can not be anonymized as this TLD does not yet support whois privacy for legal persons
+    20000: ValidationError,         # This email address has been verified already
+    20001: InProgress,              # Verification email in progress
+    20002: ValidationError,         # Required argument is missed
 }
 
 
