@@ -32,7 +32,7 @@ Now you can run the tests:
 
 .. code:: shell
 
-    python setup.py nosetests
+    python setup.py test
 
 Building the docs
 -----------------

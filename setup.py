@@ -1,12 +1,35 @@
 # coding=utf-8
 
+cmdclass = {}
+
 try:
     from setuptools import setup
 except ImportError:
     from distutils.core import setup
+else:
+    from setuptools.command.test import test as TestCommand
+
+    class PyTest(TestCommand):
+        def initialize_options(self):
+            TestCommand.initialize_options(self)
+            self.pytest_args = []
+
+        def finalize_options(self):
+            TestCommand.finalize_options(self)
+            self.test_args = []
+            self.test_suite = True
+
+        def run_tests(self):
+            # import here, cause outside the eggs aren't loaded
+            import pytest
+            errno = pytest.main(self.pytest_args)
+            sys.exit(errno)
+
+    cmdclass['test'] = PyTest
 
 import sys
 unittest_requirements = ['unittest2'] if sys.version_info[:2] == (2, 6) else []
+
 
 setup(
     name='openprovider.py',
@@ -24,9 +47,7 @@ setup(
     ],
     tests_require=[
         "betamax",
+        "pytest",
     ] + unittest_requirements,
-    setup_requires=[
-        'nose>=1.0',
-        'coverage>=3.7'
-    ]
+    cmdclass=cmdclass,
 )
