@@ -36,7 +36,7 @@ class DomainTestCase(ApiTestCase):
         auth_code = str(response.auth_code)
 
         # Now transfer it to the second account
-        with Betamax(self.api.session).use_cassette('domain_transfer_transfer'):
+        with Betamax(secundary_api.session).use_cassette('domain_transfer_transfer'):
             response = secundary_api.domain.transfer_domain_request(
                     domain, 1, auth_code, secundary_handle, secundary_handle, secundary_handle,
                     ns_group='dns-openprovider',
@@ -48,12 +48,12 @@ class DomainTestCase(ApiTestCase):
             self.assertRaises(NoSuchElement, self.api.domain.retrieve_domain_request, domain)
 
         # And be there at the second
-        with Betamax(self.api.session).use_cassette('domain_transfer_retrieve_new_registry'):
+        with Betamax(secundary_api.session).use_cassette('domain_transfer_retrieve_new_registry'):
             self.assertIsNotNone(secundary_api.domain.retrieve_domain_request(domain))
 
         # Try to clean up
         try:
-            with Betamax(self.api.session).use_cassette('domain_transfer_delete_domain'):
+            with Betamax(secundary_api.session).use_cassette('domain_transfer_delete_domain'):
                 secundary_api.delete_domain_request(domain)
         except:
             pass
