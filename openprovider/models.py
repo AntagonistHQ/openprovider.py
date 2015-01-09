@@ -39,7 +39,7 @@ class Model(object):
             attr = snake_to_camel(attr)
 
         if attr in self.__dict__:
-            # Check ourselves first no avoid infinite loops
+            # Check ourselves first to avoid infinite loops
             return getattr(self, attr)
 
         try:
@@ -66,7 +66,7 @@ class Model(object):
         return "<%s.%s: %s>" % (type(self).__module__, type(self).__name__, self)
 
     def __str__(self):
-        return lxml.etree.tostring(self._obj)
+        return str(lxml.etree.tostring(self._obj))
 
 
 def submodel(klass, key):
