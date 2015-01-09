@@ -12,7 +12,7 @@ from openprovider.api import api_factory
 
 def configure_betamax(api, **additional_apis):
     with Betamax.configure() as config:
-        config.cassette_library_dir = 'openprovider/tests/fixtures/cassettes'
+        config.cassette_library_dir = 'tests/fixtures/cassettes'
         config.match_requests_on = ['method', 'uri', 'body']
 
         def _set_api(api, template):
