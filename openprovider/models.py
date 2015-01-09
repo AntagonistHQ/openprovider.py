@@ -5,6 +5,7 @@ Wrapper classes for API models. Most of these are thin wrappers over lxml
 objectified versions of API responses.
 """
 
+import datetime
 import lxml.etree
 from openprovider.util import camel_to_snake, snake_to_camel
 
@@ -132,6 +133,37 @@ class Domain(Model):
         return "%s.%s" % (self.name, self.extension)
 
 
+class RegistryDetails(Model):
+    """
+    A container for a messages from the registry
+
+    messages
+        A list of messages
+    """
+
+    @property
+    def messages(self):
+        try:
+            return [RegistryMessage(item) for item in self.array[0].item]
+        except AttributeError:
+            return []
+
+
+class RegistryMessage(Model):
+    """
+    A message from the registry
+
+    date
+        A datetime object of the message
+    message
+        The actual message
+    """
+
+    @property
+    def date(self):
+        return datetime.datetime.strptime(str(self._obj.date), '%Y-%m-%d %H:%M:%S')
+
+
 class DomainDetails(Model):
     """
 
@@ -139,6 +171,7 @@ class DomainDetails(Model):
     """
 
     domain = submodel(Domain, "domain")
+    registry_details = submodel(RegistryDetails, "registryDetails")
 
     def __str__(self):
         return str(self.domain)

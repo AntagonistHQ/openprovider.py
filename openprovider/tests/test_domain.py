@@ -8,7 +8,8 @@ from datetime import datetime as dt
 
 from openprovider.api import api_factory
 from openprovider.exceptions import NoSuchElement
-from openprovider.tests import ApiTestCase, configure_betamax
+from openprovider.models import DomainDetails, RegistryDetails
+from openprovider.tests import ApiTestCase, configure_betamax, betamaxed
 
 
 class DomainTestCase(ApiTestCase):
@@ -57,3 +58,16 @@ class DomainTestCase(ApiTestCase):
                 secundary_api.delete_domain_request(domain)
         except:
             pass
+
+    @betamaxed
+    def test_domain_details_with_registry_details(self):
+        # Hand modified to ensure registryDetails were in place
+        del self.api.session.headers['Accept-Encoding']
+
+        response = self.api.domain.retrieve_domain_request('antagonist.net', registry_details=True)
+
+        self.assertFalse(response is None)
+        self.assertTrue(isinstance(response, DomainDetails))
+        self.assertTrue(isinstance(response.registry_details, RegistryDetails))
+        self.assertTrue(len(response.registry_details.messages) > 0)
+        self.assertFalse(response.registry_details.messages[0].date is None)
