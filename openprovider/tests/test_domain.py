@@ -49,7 +49,7 @@ class DomainTestCase(ApiTestCase):
 
         # And be there at the second
         with Betamax(secundary_api.session).use_cassette('domain_transfer_retrieve_new_registry'):
-            self.assertIsNotNone(secundary_api.domain.retrieve_domain_request(domain))
+            self.assertFalse(secundary_api.domain.retrieve_domain_request(domain) is None)
 
         # Try to clean up
         try:
