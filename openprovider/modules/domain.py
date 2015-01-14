@@ -203,3 +203,11 @@ class DomainModule(common.Module):
         )
         response = self.request(request)
         return response.as_models(DomainDetails)
+
+    def renew_domain_request(self, domain, period):
+        request = E.renewDomainRequest(
+                _domain(domain),
+                E.period(period),
+        )
+        response = self.request(request)
+        return response.as_model(Model)
