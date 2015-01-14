@@ -161,7 +161,17 @@ class RegistryMessage(Model):
 
     @property
     def date(self):
-        return datetime.datetime.strptime(str(self._obj.date), '%Y-%m-%d %H:%M:%S')
+        date = None
+        try:
+            date = self._attrs['date']
+        except KeyError:
+            if self._obj is not None:
+                try:
+                    date = self._obj['date']
+                except (AttributeError, KeyError):
+                    pass
+
+        return datetime.datetime.strptime(str(date), '%Y-%m-%d %H:%M:%S') if date else None
 
 
 class DomainDetails(Model):
