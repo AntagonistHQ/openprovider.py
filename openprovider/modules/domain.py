@@ -163,6 +163,30 @@ class DomainModule(common.Module):
         response = self.request(request)
         return response.as_model(Model)
 
+    def trade_domain_request(self, domain, period, owner_handle, admin_handle, tech_handle,
+            billing_handle=None, reseller_handle=None, auth_code=None, ns_group=None,
+            ns_template_name=None, name_servers=None, use_domicile=None, promo_code=None,
+            dnssec_keys=None):
+
+        request = E.tradeDomainRequest(
+                _domain(domain),
+                E.period(period),
+                E.ownerHandle(owner_handle),
+                E.adminHandle(admin_handle),
+                E.techHandle(tech_handle),
+                OE('billingHandle', billing_handle),
+                OE('resellerHandle', reseller_handle),
+                OE('authCode', auth_code),
+                OE('nsGroup', ns_group),
+                OE('nsTemplateName', ns_template_name),
+                OE('nameServers', name_servers, transform=_nameservers),
+                OE('useDomicile', use_domicile, transform=int),
+                OE('promoCode', promo_code),
+                OE('dnssecKeys', dnssec_keys, transform=_dnssec_keys),
+        )
+        response = self.request(request)
+        return response.as_model(Model)
+
     def search_domain_request(self, limit=None, offset=None, extension=None,
             domain_name_pattern=None, contact_handle=None, ns_group_pattern=None, status=None,
             with_addition_data=None):
