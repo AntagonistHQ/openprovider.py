@@ -211,3 +211,30 @@ class DomainModule(common.Module):
         )
         response = self.request(request)
         return response.as_model(Model)
+
+    def request_auth_code_domain_request(self, domain, auth_code_type=None):
+        request = E.requestAuthCodeDomainRequest(
+                _domain(domain),
+                OE('authCodeType', auth_code_type),
+        )
+        response = self.request(request)
+        return response.as_model(Model)
+
+    def reset_auth_code_domain_request(self, domain):
+        request = E.resetAuthCodeDomainRequest(_domain(domain))
+        response = self.request(request)
+        return response.as_model(Model)
+
+    def approve_transfer_domain_request(self, domain, approve, registrar_tag=None):
+        request = E.approveTransferDomainRequest(
+                _domain(domain),
+                E.approve(int(approve)),
+                OE('registrarTag', registrar_tag),
+        )
+        response = self.request(request)
+        return response.as_model(Model)
+
+    def restore_domain_request(self, domain):
+        request = E.restoreDomainRequest(_domain(domain))
+        response = self.request(request)
+        return response.as_model(Model)
