@@ -159,6 +159,8 @@ class RegistryMessage(Model):
         The actual message
     """
 
+    message = textattribute("message")
+
     @property
     def date(self):
         date = None

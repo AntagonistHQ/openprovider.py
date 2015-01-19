@@ -70,4 +70,5 @@ class DomainTestCase(ApiTestCase):
         self.assertTrue(isinstance(response, DomainDetails))
         self.assertTrue(isinstance(response.registry_details, RegistryDetails))
         self.assertTrue(len(response.registry_details.messages) > 0)
-        self.assertFalse(response.registry_details.messages[0].date is None)
+        self.assertTrue(isinstance(response.registry_details.messages[0].date, dt))
+        self.assertTrue(isinstance(response.registry_details.messages[0].message, str))
