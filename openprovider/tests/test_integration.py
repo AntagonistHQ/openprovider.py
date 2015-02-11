@@ -5,6 +5,8 @@ The test_integration module provides integration (black-box) tests for the
 entire library.
 """
 
+from betamax import Betamax
+
 from openprovider import tests
 from openprovider.data.sslcerts import CertTypes
 from openprovider.exceptions import BadRequest
@@ -78,10 +80,6 @@ class TestSSL(tests.ApiTestCase):
     def test_ssl_order(self):
         """Test that orders a SSL certificate, then cancels it."""
 
-        if not hasattr(self, 'skipTest'):  # python 2.6
-            return
-        self.skipTest("Broken for some unknown reason")
-
         csr = textwrap.dedent("""
         -----BEGIN CERTIFICATE REQUEST-----
         MIICzjCCAbYCAQAwgYgxCzAJBgNVBAYTAk5MMRMwEQYDVQQIDApPdmVyaWpzc2Vs
@@ -110,19 +108,24 @@ class TestSSL(tests.ApiTestCase):
         mail1 = "admin@example.com"
         mail2 = "administrator@example.com"
 
-        decoded_csr = self.api.ssl.decode_csr(csr)
-        self.assertEqual(cname, decoded_csr.subject.commonName)
+        with Betamax(self.api.session).use_cassette('test_ssl_order_decode_csr'):
+            decoded_csr = self.api.ssl.decode_csr(csr)
+            self.assertEqual(cname, decoded_csr.subject.commonName)
 
-        oid = self.api.ssl.create(cert, 1, csr, "linux", cust, mail1)
+        with Betamax(self.api.session).use_cassette('test_ssl_order_create'):
+            oid = self.api.ssl.create(cert, 1, csr, "linux", cust, mail1)
 
-        self.assertTrue(cust,
-                        self.api.ssl.retrieve_order(oid).organizationHandle)
+        with Betamax(self.api.session).use_cassette('test_ssl_order_retrieve'):
+            self.assertEqual(cust, self.api.ssl.retrieve_order(oid).organizationHandle)
 
-        self.assertTrue(oid,
-                        self.api.ssl.change_approver_email_address(oid, mail2))
+        with Betamax(self.api.session).use_cassette('test_ssl_order_change_approver'):
+            self.assertEqual(oid, self.api.ssl.change_approver_email_address(oid, mail2))
 
-        self.assertEqual(oid, self.api.ssl.resend_approver_email(oid))
-        self.assertEqual(oid, self.api.ssl.cancel(oid))
+        with Betamax(self.api.session).use_cassette('test_ssl_order_change_resend'):
+            self.assertEqual(oid, self.api.ssl.resend_approver_email(oid))
+
+        with Betamax(self.api.session).use_cassette('test_ssl_order_change_cancel'):
+            self.assertEqual(oid, self.api.ssl.cancel(oid))
 
     @tests.betamaxed
     def test_ssl_approver_email(self):
