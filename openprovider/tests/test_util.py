@@ -30,3 +30,18 @@ class SnakeToCamelTest(unittest.TestCase):
     def test_camel_case_as_input(self):
         # This may not be what the user wants, but it is what it is
         self.assertEqual(snake_to_camel("countryCode"), "countrycode")
+
+
+class ParsePhoneNumberTest(unittest.TestCase):
+    def test_parse_valid(self):
+        self.assertEqual(parse_phone_number("+1.5552368"), ("+1", "5", "552368"))
+
+    def test_parse_passthru(self):
+        tel = ("+1", "867", "5309")
+        self.assertEqual(parse_phone_number(tel), tel)
+
+    def test_parse_invalid(self):
+        self.assertRaises(ValueError, parse_phone_number, "123")
+        self.assertRaises(ValueError, parse_phone_number, "+31.")
+        self.assertRaises(ValueError, parse_phone_number, [1, 2, 3, 4])
+        self.assertRaises(ValueError, parse_phone_number, object())

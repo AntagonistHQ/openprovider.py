@@ -5,6 +5,7 @@ try:
     from string import maketrans
 except ImportError:  # Python 3
     maketrans = str.maketrans
+    basestring = str
 import re
 
 
