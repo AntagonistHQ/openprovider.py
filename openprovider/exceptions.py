@@ -8,6 +8,10 @@ Openprovider.py-specific exceptions.
 class OpenproviderError(Exception):
     """Superclass for all of our exceptions."""
 
+    def __init__(self, message, code=None):
+        super(OpenproviderError, self).__init__(message)
+        self.code = code
+
 
 class BadRequest(OpenproviderError):
     """A request didn't pass validation or was denied by Openprovider."""
