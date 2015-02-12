@@ -10,9 +10,13 @@ from betamax import Betamax
 from openprovider import tests
 from openprovider.data.sslcerts import CertTypes
 from openprovider.exceptions import BadRequest
-from openprovider.models import Reseller, Address
+from openprovider.models import Reseller, Address, Nameserver
+
+from openprovider.tests.factories.domainname import domainname
+from openprovider.tests.factories.nameserver import nameservers
 
 import textwrap
+import datetime
 
 
 class TestDomains(tests.ApiTestCase):
@@ -44,6 +48,34 @@ class TestDomains(tests.ApiTestCase):
         result = self.api.domains.check_many(["example.com", "example.net"])
         self.assertEqual(result,
                          {"example.com": "active", "example.net": "active"})
+
+    @tests.betamaxed
+    def test_domain_search_empty(self):
+        """Searching for example.com should return nothing."""
+        result = self.api.domains.search_domain_request(domain_name_pattern="example.com")
+        self.assertEqual(result, [])
+
+    def test_domain_order(self):
+        """Test that creates a domain name, then deletes it."""
+        dname = domainname()
+        name_servers = nameservers()
+        cust = "YN000088-NL"
+
+        with Betamax(self.api.session).use_cassette('test_domain_order_create'):
+            self.api.domains.create_domain_request(
+                    domain=dname,
+                    period=1,
+                    owner_handle=cust,
+                    admin_handle=cust,
+                    tech_handle=cust,
+                    name_servers=name_servers,
+            )
+
+        with Betamax(self.api.session).use_cassette('test_domain_order_modify'):
+            self.api.domains.modify_domain_request(dname, comments="(Test edit, please ignore)")
+
+        with Betamax(self.api.session).use_cassette('test_domain_order_delete'):
+            self.api.domains.delete_domain_request(dname)
 
 
 class TestExtensions(tests.ApiTestCase):
