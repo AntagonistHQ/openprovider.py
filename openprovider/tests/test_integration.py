@@ -72,10 +72,21 @@ class TestDomains(tests.ApiTestCase):
             )
 
         with Betamax(self.api.session).use_cassette('test_domain_order_modify'):
-            self.api.domains.modify_domain_request(dname, comments="(Test edit, please ignore)")
+            self.api.domains.modify_domain_request(dname, comments="Test")
+
+        with Betamax(self.api.session).use_cassette('test_domain_order_retrieve'):
+            result = self.api.domains.retrieve_domain_request(dname)
+            self.assertEqual(result.comments, "Test")
+            self.assertEqual(result.owner_handle, cust)
+            self.assertEqual(result.admin_handle, cust)
+            self.assertEqual(result.tech_handle, cust)
 
         with Betamax(self.api.session).use_cassette('test_domain_order_delete'):
             self.api.domains.delete_domain_request(dname)
+
+        with Betamax(self.api.session).use_cassette('test_domain_order_post'):
+            result = self.api.domains.search_domain_request(domain_name_pattern=dname)
+            self.assertEqual(result, [])
 
 
 class TestExtensions(tests.ApiTestCase):
