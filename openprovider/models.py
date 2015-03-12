@@ -67,7 +67,7 @@ class Model(object):
         return "<%s.%s: %s>" % (type(self).__module__, type(self).__name__, self)
 
     def __str__(self):
-        return str(lxml.etree.tostring(self._obj)) if self._obj else 'Empty model'
+        return str(lxml.etree.tostring(self._obj)) if self._obj is not None else 'Empty model'
 
 
 def submodel(klass, key):
