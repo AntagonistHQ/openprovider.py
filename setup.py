@@ -16,7 +16,7 @@ setup(
     description='An unofficial library for the OpenProvider API',
     long_description=open('README.rst').read(),
     install_requires=[
-        "requests >= 2.3.0",
+        "requests >= 2.3.0, <= 2.5.1",
         "lxml >= 3.3.5",
     ],
     tests_require=[
