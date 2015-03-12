@@ -38,9 +38,9 @@ MODULE_MAPPING = {
         'customers': CustomerModule,
         'domains': DomainModule,
         'extensions': ExtensionModule,
+        'financial': FinancialModule,
         'nameserver': NameserverModule,
         'nsgroup': NSGroupModule,
-        'ssl': SSLModule,
         'reseller': ResellerModule,
-        'financial': FinancialModule,
+        'ssl': SSLModule,
 }
