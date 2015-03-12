@@ -5,6 +5,9 @@ try:
 except ImportError:
     from distutils.core import setup
 
+import sys
+unittest_requirements = ['unittest2'] if sys.version_info[:2] == (2, 6) else []
+
 setup(
     name='openprovider.py',
     version='0.8.1',
@@ -21,7 +24,7 @@ setup(
     ],
     tests_require=[
         "betamax",
-    ],
+    ] + unittest_requirements,
     setup_requires=[
         'nose>=1.0',
         'coverage>=3.7'

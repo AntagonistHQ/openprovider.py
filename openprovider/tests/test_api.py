@@ -1,19 +1,18 @@
 import os
 
-from unittest import TestCase
+try:  # Python 2.6 compatibility
+    from unittest2 import TestCase
+except ImportError:
+    from unittest import TestCase
 
 from openprovider.api import api_factory
 
 
 class ApiFactoryTest(TestCase):
     def test_no_env(self):
-        # Python 2.6 has no assertRaises that can act as context manager
-        try:
+        with self.assertRaises(KeyError) as cm:
             api_factory('myaccount')
-        except KeyError as e:
-            self.assertEqual(str(e), "'Missing openprovider username for account myaccount'")
-        else:
-            self.fail('Expected KeyError to be raised')
+        self.assertEqual(str(cm.exception), "'Missing openprovider username for account myaccount'")
 
     def test_with_env(self):
         os.environ['OPENPROVIDER_APIFACTORY_TEST_USERNAME'] = 'myusername'
