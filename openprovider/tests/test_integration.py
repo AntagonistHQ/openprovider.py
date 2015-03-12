@@ -9,13 +9,14 @@ from betamax import Betamax
 
 from openprovider import tests
 from openprovider.data.sslcerts import CertTypes
-from openprovider.exceptions import BadRequest
+from openprovider.exceptions import BadRequest, ValidationError
 from openprovider.models import Reseller, Address
 
 from openprovider.tests.factories.domainname import domainname
 from openprovider.tests.factories.nameserver import nameservers
 
 import textwrap
+import uuid
 
 
 class TestDomains(tests.ApiTestCase):
@@ -199,3 +200,46 @@ class TestCustomer(tests.ApiTestCase):
     def test_customer_search_non_existing(self):
         r = self.api.customers.search_customer(email_pattern="doesntexist.com")
         self.assertTrue(len(r) == 0)
+
+
+class TestEmail(tests.ApiTestCase):
+    """Smoke tests for the email module."""
+
+    # These tests are a bit flawed in that we expect some things to exist or not exist, but since
+    # it's betamaxed we can probably get away with it for a long time
+
+    @tests.betamaxed
+    def test_seach_non_existing(self):
+        email = 'nonexisting@example.org'
+        results = self.api.email.search_customer_email_verification_request(email)
+        self.assertEqual(results, [])
+
+    @tests.betamaxed
+    def test_seach_existing(self):
+        email = 'test@example.org'
+        results = self.api.email.search_customer_email_verification_request(email)
+        self.assertEqual(len(results), 1)
+
+        result = results[0]
+        self.assertEqual(result.name, email)
+        self.assertTrue(hasattr(result, 'id'))
+        self.assertTrue(hasattr(result, 'status'))
+
+    @tests.betamaxed
+    def test_start_verification(self):
+        email = '%s@example.org' % uuid.uuid4()
+        results = self.api.email.start_customer_email_verification_request(email)
+        self.assertIsNotNone(results)
+
+    @tests.betamaxed
+    def test_restart_non_existing_verification(self):
+        email = '%s@example.org' % uuid.uuid4()
+        with self.assertRaises(ValidationError) as cm:
+            self.api.email.restart_customer_email_verification_request(email)
+        self.assertEqual(cm.exception.code, 1203)
+
+    @tests.betamaxed
+    def test_restart_existing_verification(self):
+        email = 'demo@example.org'
+        result = self.api.email.restart_customer_email_verification_request(email)
+        self.assertIsNotNone(result)

@@ -26,6 +26,7 @@ def OE(element, value, transform=lambda x: x):
 
 from openprovider.modules.customer import CustomerModule
 from openprovider.modules.domain import DomainModule
+from openprovider.modules.email import EmailModule
 from openprovider.modules.extension import ExtensionModule
 from openprovider.modules.financial import FinancialModule
 from openprovider.modules.nameserver import NameserverModule
@@ -37,6 +38,7 @@ from openprovider.modules.ssl import SSLModule
 MODULE_MAPPING = {
         'customers': CustomerModule,
         'domains': DomainModule,
+        'email': EmailModule,
         'extensions': ExtensionModule,
         'financial': FinancialModule,
         'nameserver': NameserverModule,
