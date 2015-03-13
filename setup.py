@@ -10,7 +10,7 @@ unittest_requirements = ['unittest2'] if sys.version_info[:2] == (2, 6) else []
 
 setup(
     name='openprovider.py',
-    version='0.8.1',
+    version='0.9.0',
     author='Antagonist B.V.',
     author_email='info@antagonist.nl',
     packages=['openprovider', 'openprovider.modules', 'openprovider.data'],
