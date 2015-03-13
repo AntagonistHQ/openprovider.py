@@ -1,6 +1,10 @@
 # coding=utf-8
 
-import unittest
+try:  # Python 2.6 compatibility
+    import unittest2 as unittest
+except ImportError:
+    import unittest
+
 from betamax import Betamax
 from functools import wraps
 from openprovider.api import api_factory
