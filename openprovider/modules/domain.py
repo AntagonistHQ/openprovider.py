@@ -238,3 +238,8 @@ class DomainModule(common.Module):
         request = E.restoreDomainRequest(_domain(domain))
         response = self.request(request)
         return response.as_model(Model)
+
+    def try_again_domain_request(self, domain):
+        request = E.tryAgainDomainRequest(_domain(domain))
+        response = self.request(request)
+        return response.as_model(Model)
