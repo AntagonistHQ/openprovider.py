@@ -7,14 +7,14 @@ entire library.
 
 from betamax import Betamax
 
-from openprovider import tests
 from openprovider.data.sslcerts import CertTypes
 from openprovider.exceptions import BadRequest, ValidationError
 from openprovider.models import Reseller, Address
 
-from openprovider.tests.factories.domainname import domainname
-from openprovider.tests.factories.nameserver import nameservers
+from tests.factories.domainname import domainname
+from tests.factories.nameserver import nameservers
 
+import tests
 import textwrap
 import uuid
 

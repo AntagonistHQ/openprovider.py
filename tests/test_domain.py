@@ -9,7 +9,7 @@ from datetime import datetime as dt
 from openprovider.api import api_factory
 from openprovider.exceptions import NoSuchElement
 from openprovider.models import DomainDetails, RegistryDetails
-from openprovider.tests import ApiTestCase, configure_betamax, betamaxed
+from tests import ApiTestCase, configure_betamax, betamaxed
 
 
 class DomainTestCase(ApiTestCase):
