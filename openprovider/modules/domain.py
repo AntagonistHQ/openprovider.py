@@ -18,7 +18,7 @@ def _nameservers(nameservers):
 
 
 def _dnssec_keys(keys):
-    items = [E.item(E.flags(key.flags), E.alg(key.alg), E.pubKey(key.pubkey)) for key in keys]
+    items = [E.item(E.flags(key.flags), E.alg(key.alg), E.protocol(getattr(key, 'protocol', 3)), E.pubKey(key.pubkey)) for key in keys]
     return E.array(*items)
 
 
