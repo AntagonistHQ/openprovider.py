@@ -1,6 +1,6 @@
 # coding=utf-8
 
-from openprovider.modules import E, common
+from openprovider.modules import E, OE, common
 from openprovider.models import SSLProduct, SSLOrder
 
 
@@ -48,7 +48,7 @@ class SSLModule(common.Module):
         return response.as_model(SSLOrder)
 
     def create(self, product_id, period, csr, software_id, organization_handle,
-               approver_email, **kwargs):
+               approver_email, signature_hash_algorithm=None, **kwargs):
         """Order a new SSL certificate."""
 
         response = self.request(E.createSslCertRequest(
@@ -58,11 +58,13 @@ class SSLModule(common.Module):
             E.softwareId(software_id),
             E.organizationHandle(organization_handle),
             E.approverEmail(approver_email),
+            OE('signatureHashAlgorithm', signature_hash_algorithm),
         ))
 
         return int(response.data.id)
 
-    def reissue(self, order_id, csr, software_id, organization_handle, approver_email):
+    def reissue(self, order_id, csr, software_id, organization_handle, approver_email,
+                signature_hash_algorithm=None):
         """Reissue an SSL certificate order"""
 
         response = self.request(E.reissueSslCertRequest(
@@ -71,6 +73,7 @@ class SSLModule(common.Module):
             E.softwareId(software_id),
             E.organizationHandle(organization_handle),
             E.approverEmail(approver_email),
+            OE('signatureHashAlgorithm', signature_hash_algorithm),
         ))
 
         return int(response.data.id)
