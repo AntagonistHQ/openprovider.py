@@ -4,18 +4,32 @@ from openprovider.modules import E, OE, common
 from openprovider.models import SSLProduct, SSLOrder
 
 
+def _domain_validation_methods(methods):
+    if not methods:
+        return None
+
+    items = [E.item(E.hostName(hostname), E.method(method)) for hostname, method in methods.items()]
+    return E.array(*items)
+
+
+def _simple_array(hostnames):
+    items = [E.item(name) for name in hostnames]
+    return E.array(*items)
+
+
 class SSLModule(common.Module):
     """Bindings to API methods in the SSL module."""
 
-    def search_product(self, limit=100, offset=0, **kw):
+    def search_product(self, limit=100, offset=0, with_price=0, with_supported_software=0,
+                       with_description=0):
         """Search the list of available products."""
 
         response = self.request(E.searchProductSslCertRequest(
             E.limit(limit),
             E.offset(offset),
-            E.withPrice(int(kw.get('with_price', 0))),
-            E.withSupportedSoftware(int(kw.get('with_supported_software', 0))),
-            E.withDescription(int(kw.get('with_description', 0)))
+            E.withPrice(int(with_price)),
+            E.withSupportedSoftware(int(with_supported_software)),
+            E.withDescription(int(with_description)),
         ))
         return response.as_models(SSLProduct)
 
@@ -28,12 +42,16 @@ class SSLModule(common.Module):
 
         return response.as_model(SSLProduct)
 
-    def search_order(self, limit=100, offset=0, **kwargs):
+    def search_order(self, limit=100, offset=0, common_name_pattern=None, status=None,
+                     contact_handle=None):
         """Search all SSL certificate orders."""
 
         response = self.request(E.searchOrderSslCertRequest(
             E.limit(limit),
-            E.offset(offset)
+            E.offset(offset),
+            OE('commonNamePattern', common_name_pattern),
+            OE('status', status, transform=_simple_array),
+            OE('contactHandle', contact_handle),
         ))
 
         return response.as_models(SSLOrder)
@@ -48,7 +66,8 @@ class SSLModule(common.Module):
         return response.as_model(SSLOrder)
 
     def create(self, product_id, period, csr, software_id, organization_handle,
-               approver_email, signature_hash_algorithm=None, **kwargs):
+               approver_email, signature_hash_algorithm=None, domain_validation_methods=None,
+               hostnames=None, technical_handle=None):
         """Order a new SSL certificate."""
 
         response = self.request(E.createSslCertRequest(
@@ -59,12 +78,16 @@ class SSLModule(common.Module):
             E.organizationHandle(organization_handle),
             E.approverEmail(approver_email),
             OE('signatureHashAlgorithm', signature_hash_algorithm),
+            OE('domainValidationMethods', domain_validation_methods, transform=_domain_validation_methods),
+            OE('hostNames', hostnames, transform=_simple_array),
+            OE('technicalHandle', technical_handle),
         ))
 
         return int(response.data.id)
 
     def reissue(self, order_id, csr, software_id, organization_handle, approver_email,
-                signature_hash_algorithm=None):
+                signature_hash_algorithm=None, domain_validation_methods=None, hostnames=None,
+                technical_handle=None):
         """Reissue an SSL certificate order"""
 
         response = self.request(E.reissueSslCertRequest(
@@ -74,9 +97,23 @@ class SSLModule(common.Module):
             E.organizationHandle(organization_handle),
             E.approverEmail(approver_email),
             OE('signatureHashAlgorithm', signature_hash_algorithm),
+            OE('domainValidationMethods', domain_validation_methods, transform=_domain_validation_methods),
+            OE('hostNames', hostnames, transform=_simple_array),
+            OE('technicalHandle', technical_handle),
         ))
 
         return int(response.data.id)
+
+    def modify(self, order_id, approver_email=None, domain_validation_methods=None):
+        """Modify an ordered SSL certificate."""
+
+        response = self.request(E.modifySslCertRequest(
+            E.id(order_id),
+            OE('approverEmail', approver_email),
+            OE('domainValidationMethods', domain_validation_methods, transform=_domain_validation_methods),
+        ))
+
+        return response.data
 
     def cancel(self, order_id):
         """Cancel an ordered SSL certificate."""
