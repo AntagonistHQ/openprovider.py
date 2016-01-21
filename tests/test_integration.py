@@ -88,6 +88,40 @@ class TestDomains(tests.ApiTestCase):
             result = self.api.domains.search_domain_request(domain_name_pattern=dname)
             self.assertEqual(result, [])
 
+    @tests.betamaxed
+    def test_price_domain_default(self):
+        dname = 'example.nl'
+
+        result = self.api.domains.retrieve_price_domain_request(dname)
+
+        self.assertIsNotNone(result.is_premium)
+        self.assertIsNotNone(result.price)
+
+        self.assertIsNotNone(result.price.product)
+        self.assertIsNotNone(result.price.product.price)
+        self.assertEqual(result.price.product.currency, 'EUR')
+
+        self.assertIsNotNone(result.price.reseller)
+        self.assertIsNotNone(result.price.reseller.price)
+        self.assertIsNotNone(result.price.reseller.currency)
+
+    @tests.betamaxed
+    def test_price_domain_with_operation(self):
+        dname = 'example.com'
+
+        result = self.api.domains.retrieve_price_domain_request(dname, 'restore')
+
+        self.assertIsNotNone(result.is_premium)
+        self.assertIsNotNone(result.price)
+
+        self.assertIsNotNone(result.price.product)
+        self.assertIsNotNone(result.price.product.price)
+        self.assertEqual(result.price.product.currency, 'USD')
+
+        self.assertIsNotNone(result.price.reseller)
+        self.assertIsNotNone(result.price.reseller.price)
+        self.assertIsNotNone(result.price.reseller.currency)
+
 
 class TestExtensions(tests.ApiTestCase):
     """Smoke tests for the extensions module."""

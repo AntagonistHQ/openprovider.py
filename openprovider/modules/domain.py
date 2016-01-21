@@ -139,6 +139,14 @@ class DomainModule(common.Module):
         response = self.request(request)
         return response.as_model(DomainDetails)
 
+    def retrieve_price_domain_request(self, domain, operation=None):
+        request = E.retrievePriceDomainRequest(
+                _domain(domain),
+                OE('operation', operation),
+        )
+        response = self.request(request)
+        return response.as_model(Model)
+
     def transfer_domain_request(self, domain, period, auth_code, owner_handle, admin_handle,
             tech_handle, billing_handle=None, reseller_handle=None, ns_group=None,
             ns_template_name=None, name_servers=None, use_domicile=False, at=None, promo_code=None,
