@@ -93,7 +93,7 @@ class OpenProvider(object):
             desc = tree.reply.desc
             code = tree.reply.code
             data = getattr(tree.reply, 'data', '')
-            raise klass("{0} ({1}) {2}".format(desc, code, data), code)
+            raise klass(u"{0} ({1}) {2}".format(desc, code, data), code)
 
 
 def _get_env(key, account):
