@@ -322,6 +322,8 @@ class Customer(Model):
     address = submodel(Address, "address")
     phone = submodel(Phone, "phone")
     fax = submodel(Phone, "fax")
+    additional_data = submodel(Model, "additionalData")
+    extension_additional_data = submodel(Model, "additionalData")
 
     def __str__(self):
         return str(self.handle)

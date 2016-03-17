@@ -18,11 +18,15 @@ def configure_betamax(api, **additional_apis):
         # Configure primary API
         config.define_cassette_placeholder('<URL>', api.url)
         _set_api(api, '<%s>')
+        # placeholders aren't replaced in gzipped responses
+        api.session.headers['Accept-Encoding'] = ''
 
         # Any additional APIs
         for name, api in additional_apis.items():
             template = '<' + name.upper() + '_%s>' if name else '<%s>'
             _set_api(api, template)
+            # placeholders aren't replaced in gzipped responses
+            api.session.headers['Accept-Encoding'] = ''
 
 
 def betamaxed(original_function):

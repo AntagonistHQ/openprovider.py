@@ -2,7 +2,29 @@
 
 from openprovider.modules import E, common
 from openprovider.models import Customer
-from openprovider.util import parse_phone_number
+from openprovider.util import parse_phone_number, snake_to_camel
+
+
+def _additional_data(data):
+    if data is None:
+        return None
+
+    element = E.additionalData()
+    for key, value in data.items():
+        if key == 'birth_date':
+            try:
+                value = value.strftime('%Y-%m-%d')
+            except AttributeError:
+                pass
+        element.append(E(snake_to_camel(key), value))
+    return element
+
+
+def _extension_additional_data(data):
+    if data is None:
+        return None
+
+    return E.extensionAdditionalData(E(snake_to_camel(key), value) for key, value in data.items())
 
 
 def _get_phone_xml(parent, number):
@@ -21,7 +43,7 @@ class CustomerModule(common.Module):
     """Bindings to API methods in the customer module."""
 
     def create_customer(self, name, gender, address, phone, email, vat=None, fax=None,
-                        company_name=None, additional_data={}):
+                        company_name=None, additional_data=None, extension_additional_data=None):
         """Create a customer"""
 
         response = self.request(E.createCustomerRequest(
@@ -46,7 +68,8 @@ class CustomerModule(common.Module):
                 E.country(address.country),
             ),
             E.email(email),
-            E.additionalData(*[E(key, value) for key, value in additional_data.items()]),
+            _additional_data(additional_data),
+            _extension_additional_data(extension_additional_data),
         ))
 
         return str(response.data.handle)
@@ -59,7 +82,7 @@ class CustomerModule(common.Module):
         return True
 
     def modify_customer(self, handle, address, phone, email=None, vat=None, fax=None,
-                        company_name=None, additional_data={}):
+                        company_name=None, additional_data=None, extension_additional_data=None):
         """Modify a customer."""
 
         self.request(E.modifyCustomerRequest(
@@ -77,7 +100,8 @@ class CustomerModule(common.Module):
                 E.country(address.country),
             ),
             E.email(email or ''),
-            E.additionalData(*[E(key, value) for key, value in additional_data.items()]),
+            _additional_data(additional_data),
+            _extension_additional_data(extension_additional_data),
         ))
 
         return True
