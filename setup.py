@@ -1,4 +1,5 @@
 # coding=utf-8
+import sys
 
 cmdclass = {}
 
@@ -27,9 +28,6 @@ else:
 
     cmdclass['test'] = PyTest
 
-import sys
-unittest_requirements = ['unittest2'] if sys.version_info[:2] == (2, 6) else []
-
 
 setup(
     name='openprovider.py',
@@ -48,6 +46,6 @@ setup(
     tests_require=[
         "betamax",
         "pytest",
-    ] + unittest_requirements,
+    ],
     cmdclass=cmdclass,
 )
