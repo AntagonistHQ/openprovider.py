@@ -112,6 +112,10 @@ class Name(Model):
         Last name
     """
 
+    def __eq__(self, other):
+        attributes = ['initials', 'first_name', 'prefix', 'last_name']
+        return all(getattr(self, attr, None) == getattr(other, attr, None) for attr in attributes)
+
     def __str__(self):
         if getattr(self, "prefix", None):
             return "%s %s %s" % (self.first_name, self.prefix, self.last_name)
@@ -251,7 +255,10 @@ class Address(Model):
     state (optional)
     country (required)
     """
-    pass
+
+    def __eq__(self, other):
+        attributes = ['street', 'number', 'suffix', 'zipcode', 'city', 'state', 'country']
+        return all(getattr(self, attr, None) == getattr(other, attr, None) for attr in attributes)
 
 
 class Phone(Model):
@@ -266,6 +273,10 @@ class Phone(Model):
     country_code = textattribute("countryCode")
     area_code = textattribute("areaCode")
     subscriber_number = textattribute("subscriberNumber")
+
+    def __eq__(self, other):
+        attributes = ['country_code', 'area_code', 'subscriber_number']
+        return all(getattr(self, attr, None) == getattr(other, attr, None) for attr in attributes)
 
     def __str__(self):
         """Return the string representation of phone number."""
