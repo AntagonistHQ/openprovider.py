@@ -1,13 +1,7 @@
 # coding=utf-8
 
-try:  # Python 2.6 compatibility
-    import unittest2 as unittest
-except ImportError:
-    import unittest
-
 from betamax import Betamax
 from functools import wraps
-from openprovider.api import api_factory
 
 
 def configure_betamax(api, **additional_apis):
@@ -32,20 +26,9 @@ def configure_betamax(api, **additional_apis):
 
 
 def betamaxed(original_function):
-
     @wraps(original_function)
-    def new_function(instance, *args, **kwargs):
-        with Betamax(instance.api.session).use_cassette(original_function.__name__):
-            return original_function(instance, *args, **kwargs)
+    def new_function(api, *args, **kwargs):
+        with Betamax(api.session).use_cassette(original_function.__name__):
+            return original_function(api, *args, **kwargs)
 
     return new_function
-
-
-class ApiTestCase(unittest.TestCase):
-    """Superclass for all API test cases. Sets up the self.api value."""
-
-    api = None
-
-    def setUp(self):
-        self.api = api_factory('test')
-        configure_betamax(self.api)
