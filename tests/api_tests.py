@@ -7,7 +7,7 @@ from functools import wraps
 def configure_betamax(api, **additional_apis):
     with Betamax.configure() as config:
         config.cassette_library_dir = 'tests/fixtures/cassettes'
-        config.match_requests_on = ['method', 'uri', 'body']
+        config.default_cassette_options['match_options'] = ['method', 'uri', 'body']
 
         def _set_api(api, template):
             for attr in ('username', 'password', 'password_hash'):
