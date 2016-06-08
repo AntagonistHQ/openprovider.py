@@ -64,7 +64,8 @@ class Model(object):
         lxml.etree.dump(self._obj, *args, **kwargs)
 
     def __repr__(self):
-        return "<%s.%s: %s>" % (type(self).__module__, type(self).__name__, self)
+        args = ', '.join('%s=%r' % (attr, getattr(self, attr)) for attr in dir(self))
+        return "<%s.%s(%s)>" % (type(self).__module__, type(self).__name__, args)
 
     def __str__(self):
         return str(lxml.etree.tostring(self._obj)) if self._obj is not None else 'Empty model'
