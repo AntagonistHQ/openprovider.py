@@ -64,7 +64,8 @@ class Model(object):
         lxml.etree.dump(self._obj, *args, **kwargs)
 
     def __repr__(self):
-        return "<%s.%s: %s>" % (type(self).__module__, type(self).__name__, self)
+        args = ', '.join('%s=%r' % (attr, getattr(self, attr)) for attr in dir(self))
+        return "<%s.%s(%s)>" % (type(self).__module__, type(self).__name__, args)
 
     def __str__(self):
         return str(lxml.etree.tostring(self._obj)) if self._obj is not None else 'Empty model'
@@ -111,6 +112,10 @@ class Name(Model):
     lastName (required)
         Last name
     """
+
+    def __eq__(self, other):
+        attributes = ['initials', 'first_name', 'prefix', 'last_name']
+        return all(getattr(self, attr, None) == getattr(other, attr, None) for attr in attributes)
 
     def __str__(self):
         if getattr(self, "prefix", None):
@@ -251,7 +256,10 @@ class Address(Model):
     state (optional)
     country (required)
     """
-    pass
+
+    def __eq__(self, other):
+        attributes = ['street', 'number', 'suffix', 'zipcode', 'city', 'state', 'country']
+        return all(getattr(self, attr, None) == getattr(other, attr, None) for attr in attributes)
 
 
 class Phone(Model):
@@ -266,6 +274,10 @@ class Phone(Model):
     country_code = textattribute("countryCode")
     area_code = textattribute("areaCode")
     subscriber_number = textattribute("subscriberNumber")
+
+    def __eq__(self, other):
+        attributes = ['country_code', 'area_code', 'subscriber_number']
+        return all(getattr(self, attr, None) == getattr(other, attr, None) for attr in attributes)
 
     def __str__(self):
         """Return the string representation of phone number."""
@@ -310,6 +322,8 @@ class Customer(Model):
     address = submodel(Address, "address")
     phone = submodel(Phone, "phone")
     fax = submodel(Phone, "fax")
+    additional_data = submodel(Model, "additionalData")
+    extension_additional_data = submodel(Model, "additionalData")
 
     def __str__(self):
         return str(self.handle)

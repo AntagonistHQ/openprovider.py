@@ -44,7 +44,8 @@ setup(
         "lxml >= 3.3.5",
     ],
     tests_require=[
-        "betamax",
+        "betamax>=0.7.0",
+        "fake-factory",
         "pytest",
     ],
     cmdclass=cmdclass,
