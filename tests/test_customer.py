@@ -12,6 +12,13 @@ from openprovider.models import Address, Name, Phone
 from openprovider.util import parse_phone_number
 
 
+# Provide basestring in python3
+try:
+    basestring = basestring
+except NameError:
+    basestring = str
+
+
 fake = Factory.create('nl_NL')
 
 
