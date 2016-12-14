@@ -84,16 +84,16 @@ class OpenProvider(object):
         except requests.RequestException as e:
             raise ServiceUnavailable(str(e))
 
-        tree = lxml.objectify.fromstring(apiresponse.content)
+        responsetree = lxml.objectify.fromstring(apiresponse.content)
 
-        if tree.reply.code == 0:
-            return Response(tree)
+        if responsetree.reply.code == 0:
+            return Response(responsetree)
         else:
-            klass = from_code(tree.reply.code)
-            desc = tree.reply.desc
-            code = tree.reply.code
-            data = getattr(tree.reply, 'data', '')
-            raise klass(u"{0} ({1}) {2}".format(desc, code, data), code)
+            klass = from_code(responsetree.reply.code)
+            desc = responsetree.reply.desc
+            code = responsetree.reply.code
+            data = getattr(responsetree.reply, 'data', '')
+            raise klass("{0} ({1}) {2}".format(desc, code, data), code)
 
 
 def _get_env(key, account):
