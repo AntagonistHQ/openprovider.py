@@ -16,6 +16,9 @@ from openprovider.modules import E, OE, MODULE_MAPPING
 from openprovider.response import Response
 
 
+HOOKS = ['pre_request', 'post_request']
+
+
 def _get_module_name(module):
     """
     Return the module name.
@@ -35,7 +38,7 @@ class OpenProvider(object):
     """A connection to the OpenProvider API."""
 
     def __init__(self, username, password=None, url="https://api.openprovider.eu",
-            password_hash=None):
+            password_hash=None, hooks=None):
         """Initializes the connection with the given username and password."""
 
         if bool(password) == bool(password_hash):
@@ -59,6 +62,9 @@ class OpenProvider(object):
             if old_name != name:
                 setattr(self, old_name, instance)
 
+        hooks = hooks or {}
+        self.hooks = {hook: hooks.get(hook) for hook in HOOKS}
+
     def request(self, tree, **kwargs):
         """
         Construct a new request with the given tree as its contents, then ship
@@ -78,22 +84,30 @@ class OpenProvider(object):
             method='c14n'
         )
 
+        self._run_hook('pre_request', tree, apirequest)
+
         try:
             apiresponse = self.session.post(self.url, data=apirequest)
             apiresponse.raise_for_status()
         except requests.RequestException as e:
             raise ServiceUnavailable(str(e))
 
-        tree = lxml.objectify.fromstring(apiresponse.content)
+        responsetree = lxml.objectify.fromstring(apiresponse.content)
+        self._run_hook('post_request', apiresponse, responsetree)
 
-        if tree.reply.code == 0:
-            return Response(tree)
+        if responsetree.reply.code == 0:
+            return Response(responsetree)
         else:
-            klass = from_code(tree.reply.code)
-            desc = tree.reply.desc
-            code = tree.reply.code
-            data = getattr(tree.reply, 'data', '')
-            raise klass(u"{0} ({1}) {2}".format(desc, code, data), code)
+            klass = from_code(responsetree.reply.code)
+            desc = responsetree.reply.desc
+            code = responsetree.reply.code
+            data = getattr(responsetree.reply, 'data', '')
+            raise klass("{0} ({1}) {2}".format(desc, code, data), code)
+
+    def _run_hook(self, hook, *args, **kwargs):
+        callback = self.hooks[hook]
+        if callback:
+            callback(*args, **kwargs)
 
 
 def _get_env(key, account):
