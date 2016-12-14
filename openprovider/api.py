@@ -16,6 +16,9 @@ from openprovider.modules import E, OE, MODULE_MAPPING
 from openprovider.response import Response
 
 
+HOOKS = ['pre_request', 'post_request']
+
+
 def _get_module_name(module):
     """
     Return the module name.
@@ -35,7 +38,7 @@ class OpenProvider(object):
     """A connection to the OpenProvider API."""
 
     def __init__(self, username, password=None, url="https://api.openprovider.eu",
-            password_hash=None):
+            password_hash=None, hooks=None):
         """Initializes the connection with the given username and password."""
 
         if bool(password) == bool(password_hash):
@@ -59,6 +62,9 @@ class OpenProvider(object):
             if old_name != name:
                 setattr(self, old_name, instance)
 
+        hooks = hooks or {}
+        self.hooks = {hook: hooks.get(hook) for hook in HOOKS}
+
     def request(self, tree, **kwargs):
         """
         Construct a new request with the given tree as its contents, then ship
@@ -78,6 +84,8 @@ class OpenProvider(object):
             method='c14n'
         )
 
+        self._run_hook('pre_request', tree, apirequest)
+
         try:
             apiresponse = self.session.post(self.url, data=apirequest)
             apiresponse.raise_for_status()
@@ -85,6 +93,7 @@ class OpenProvider(object):
             raise ServiceUnavailable(str(e))
 
         responsetree = lxml.objectify.fromstring(apiresponse.content)
+        self._run_hook('post_request', apiresponse, responsetree)
 
         if responsetree.reply.code == 0:
             return Response(responsetree)
@@ -94,6 +103,11 @@ class OpenProvider(object):
             code = responsetree.reply.code
             data = getattr(responsetree.reply, 'data', '')
             raise klass("{0} ({1}) {2}".format(desc, code, data), code)
+
+    def _run_hook(self, hook, *args, **kwargs):
+        callback = self.hooks[hook]
+        if callback:
+            callback(*args, **kwargs)
 
 
 def _get_env(key, account):
