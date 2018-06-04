@@ -31,7 +31,7 @@ else:
 
 setup(
     name='openprovider.py',
-    version='0.10.4',
+    version='0.11.0',
     author='Antagonist B.V.',
     author_email='info@antagonist.nl',
     packages=['openprovider', 'openprovider.modules', 'openprovider.data'],
