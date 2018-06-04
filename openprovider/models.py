@@ -379,7 +379,29 @@ class SSLOrder(Model):
     certificate
     rootCertificate
     """
-    pass
+
+    @property
+    def validation_details(self):
+        details = []
+
+        try:
+            for item in self.additionalData.array:
+                if hasattr(item.item, 'dnsRecord'):
+                    details.append(SSLOrderDnsValidationInfo(item.item))
+        except AttributeError:
+            pass
+
+        return details
+
+
+class SSLOrderDnsValidationInfo(Model):
+    """
+    Information about DV through DNS.
+
+    domain
+    dns_record
+    dns_value
+    """
 
 
 class Extension(Model):
