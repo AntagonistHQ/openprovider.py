@@ -66,7 +66,7 @@ class SSLModule(common.Module):
         return response.as_model(SSLOrder)
 
     def create(self, product_id, period, csr, software_id, organization_handle,
-               approver_email, signature_hash_algorithm=None, domain_validation_methods=None,
+               approver_email=None, signature_hash_algorithm=None, domain_validation_methods=None,
                hostnames=None, technical_handle=None):
         """Order a new SSL certificate."""
 
@@ -76,7 +76,7 @@ class SSLModule(common.Module):
             E.csr(csr),
             E.softwareId(software_id),
             E.organizationHandle(organization_handle),
-            E.approverEmail(approver_email),
+            OE('approverEmail', approver_email),
             OE('signatureHashAlgorithm', signature_hash_algorithm),
             OE('domainValidationMethods', domain_validation_methods, transform=_domain_validation_methods),
             OE('hostNames', hostnames, transform=_simple_array),
@@ -85,7 +85,7 @@ class SSLModule(common.Module):
 
         return int(response.data.id)
 
-    def reissue(self, order_id, csr, software_id, organization_handle, approver_email,
+    def reissue(self, order_id, csr, software_id, organization_handle, approver_email=None,
                 signature_hash_algorithm=None, domain_validation_methods=None, hostnames=None,
                 technical_handle=None):
         """Reissue an SSL certificate order"""
@@ -95,7 +95,7 @@ class SSLModule(common.Module):
             E.csr(csr),
             E.softwareId(software_id),
             E.organizationHandle(organization_handle),
-            E.approverEmail(approver_email),
+            OE('approverEmail', approver_email),
             OE('signatureHashAlgorithm', signature_hash_algorithm),
             OE('domainValidationMethods', domain_validation_methods, transform=_domain_validation_methods),
             OE('hostNames', hostnames, transform=_simple_array),
