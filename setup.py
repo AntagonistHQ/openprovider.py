@@ -45,7 +45,7 @@ setup(
     ],
     tests_require=[
         "betamax>=0.7.0",
-        "fake-factory",
+        "Faker",
         "pytest",
     ],
     cmdclass=cmdclass,
