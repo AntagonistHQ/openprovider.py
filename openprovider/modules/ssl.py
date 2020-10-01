@@ -84,6 +84,12 @@ class SSLModule(common.Module):
         ))
 
         return int(response.data.id)
+    
+    def renew(self, order_id):
+        response = self.request(E.renewSslCertRequest(
+            E.id(order_id),
+        ))
+        return int(response.data.id)
 
     def reissue(self, order_id, csr, software_id, organization_handle, approver_email=None,
                 signature_hash_algorithm=None, domain_validation_methods=None, hostnames=None,
