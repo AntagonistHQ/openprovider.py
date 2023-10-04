@@ -8,8 +8,8 @@ extensions = [
 master_doc = 'index'
 project = u'openprovider.py'
 copyright = u'2014, Antagonist B.V'
-version = '0.11.4'
-release = '0.11.4'
+version = '0.11.5'
+release = '0.11.5'
 
 html_static_path = ['_static']
 templates_path = ['_templates']
