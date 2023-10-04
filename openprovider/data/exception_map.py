@@ -546,6 +546,7 @@ MAPPING = {
     19005: ValidationError,         # Invalid fee amount for `Early Access Program` period
     19006: ValidationError,         # Domain can not be anonymized as this TLD does not yet support whois privacy
     19007: ValidationError,         # Domain can not be anonymized as this TLD does not yet support whois privacy for legal persons
+    19307: RuleViolation,           # This domain cannot be renewed yet
     20000: ValidationError,         # This email address has been verified already
     20001: InProgress,              # Verification email in progress
     20002: ValidationError,         # Required argument is missed
